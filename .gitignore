@@ -1,0 +1,46 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+/.idea
+# Make an exception for the code style
+!.idea/codeStyles/
+.DS_Store
+build/
+out/
+/captures
+.externalNativeBuild
+.cxx
+tmp
+*.log
+
+# OS-specific
+Thumbs.db
+
+# Node/JS/Web
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+pnpm-lock.yaml
+
+# VSCode
+.vscode/
+
+# Secrets and keys
+secret.key
+signing_key.txt
+
+# Danger output
+danger_out.json
+
+# Changelogs (if generated)
+CHANGELOG.md
+
+# Misc
+*.swp
+*.swo
+
+
+/gradle.properties
+gradle.properties
