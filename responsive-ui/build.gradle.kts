@@ -8,27 +8,18 @@ plugins {
 
 android {
   namespace = "com.nadeem.responsiveui"
+  compileSdk = 35
 }
 
 kotlin {
-  defaultKmpTargets(project)
-
-  iosX64()
-  iosArm64()
-  iosSimulatorArm64()
-
-  jvm("desktop") {
-    compilerOptions {
-      jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-    }
-  }
+  androidTarget()
 
   js(IR) {
     browser()
   }
 
   sourceSets {
-    val commonMain by getting {
+    commonMain {
       dependencies {
         implementation(compose.runtime)
         implementation(compose.foundation)
@@ -36,7 +27,7 @@ kotlin {
       }
     }
 
-    val androidMain by getting {
+    androidMain {
       dependencies {
         // Compose BOM ensures all versions are aligned
 //        implementation(platform("androidx.compose:compose-bom:2025.05.00")) // New way
@@ -46,27 +37,13 @@ kotlin {
       }
     }
 
-    val jsMain by getting {
+    jsMain {
       dependencies {
         implementation(compose.html.core)
       }
     }
 
-    val desktopMain by getting {
-      dependencies {
-        implementation(compose.desktop.common)
-      }
-    }
-
-    val iosMain by getting {
-      dependencies {
-        implementation(compose.runtime)
-        implementation(compose.foundation)
-        implementation(compose.material)
-      }
-    }
-
-    val commonTest by getting {
+    commonTest {
       dependencies {
         implementation(kotlin("test-common"))
         implementation(kotlin("test-annotations-common"))
