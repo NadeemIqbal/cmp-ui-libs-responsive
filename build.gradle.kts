@@ -64,7 +64,8 @@ gradleConventionsKmpDefaults {
     KmpTarget.Ios,
     KmpTarget.Js,
     KmpTarget.Jvm,
-    KmpTarget.WasmJs,
+    // Disable WebAssembly for JitPack builds
+    // KmpTarget.WasmJs,
   )
 }
 

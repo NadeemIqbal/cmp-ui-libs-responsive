@@ -2,13 +2,13 @@
 
 A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts for Android, Desktop, and Web applications.
 
-## 🎬 Demo
+## Demo
 
 ![Responsive UI Demo](example.gif)
 
 *The library automatically adapts layouts based on screen size - mobile, tablet, and desktop views*
 
-## 📦 Installation
+## Installation
 
 ### Via JitPack
 
@@ -32,7 +32,7 @@ dependencies {
 }
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```kotlin
 import com.nadeem.responsiveui.ResponsiveLayout
@@ -47,14 +47,14 @@ fun MyApp() {
 }
 ```
 
-## 📱 Supported Platforms
+## Supported Platforms
 
-- ✅ Android
-- ✅ Desktop (JVM)
-- ✅ Web (Wasm-JS)
-- 🔄 iOS (Coming Soon)
+- Android
+- Desktop (JVM)
+- Web (Wasm-JS)
+- iOS (Coming Soon)
 
-## 🛠️ Development
+## Development
 
 To build the library locally:
 ```bash
@@ -66,10 +66,10 @@ To run tests:
 ./gradlew test
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

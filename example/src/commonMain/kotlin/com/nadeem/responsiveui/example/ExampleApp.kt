@@ -15,12 +15,12 @@ import com.nadeem.responsiveui.*
 @Composable
 public fun ResponsiveUIExampleApp() {
     MaterialTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 30.dp, bottom = 20.dp, end = 30.dp)
-                .verticalScroll(rememberScrollState()),
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 30.dp, bottom = 20.dp, end = 30.dp)
+            .verticalScroll(rememberScrollState()),
+    ) {
         // Header
         Text(
             text = "Responsive UI Library Demo",
@@ -193,8 +193,8 @@ public fun ResponsiveUIExampleApp() {
 
                 DeviceInfoScreen()
             }
+            }
         }
-    }
     }
 }
 

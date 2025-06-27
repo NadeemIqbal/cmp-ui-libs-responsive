@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -15,11 +13,11 @@ version = "0.0.1"
 android {
     namespace = "com.nadeem.responsiveui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    
+
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
-    
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -39,11 +37,12 @@ kotlin {
 
     jvm("desktop")
 
-    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-        binaries.executable()
-    }
+    // Disable WebAssembly for JitPack builds to avoid dependency issues
+    // @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    // wasmJs {
+    //     browser()
+    //     binaries.executable()
+    // }
 
     sourceSets {
         commonMain {

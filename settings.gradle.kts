@@ -7,7 +7,6 @@ pluginManagement {
     mavenCentral()
     gradlePluginPortal()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-nodejs/maven")
-
   }
 }
 
@@ -18,7 +17,6 @@ dependencyResolutionManagement {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-nodejs/maven")
-
   }
 }
 
