@@ -122,14 +122,20 @@ publishing {
 signing {
     val signingKey = System.getenv("GPG_PRIVATE_KEY")
     val signingPassword = System.getenv("GPG_PASSPHRASE")
+    val signingKeyId = System.getenv("GPG_KEY_ID")
     
     if (signingKey != null && signingPassword != null) {
         println("Using GPG command line signing (key imported in workflow)")
+        println("GPG Key ID: $signingKeyId")
+        
         // Use GPG command since we imported the key in the workflow
         useGpgCmd()
         
-        // Configure GPG signing with passphrase
+        // Configure GPG signing with passphrase and key ID
         extra["signing.gnupg.passphrase"] = signingPassword
+        if (signingKeyId != null) {
+            extra["signing.gnupg.keyName"] = signingKeyId
+        }
     } else {
         println("Using GPG command line for local development")
         useGpgCmd()

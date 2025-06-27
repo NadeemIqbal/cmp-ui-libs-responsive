@@ -49,8 +49,14 @@ jobs:
         echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
         gpgconf --reload gpg-agent
         
-        # List keys to verify import
+        # List keys to verify import and get key ID
+        echo "Available GPG keys:"
         gpg --list-secret-keys --keyid-format LONG
+        
+        # Get the key ID and export it for Gradle
+        GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | cut -d'/' -f2)
+        echo "Using GPG Key ID: $GPG_KEY_ID"
+        echo "GPG_KEY_ID=$GPG_KEY_ID" >> $GITHUB_ENV
         
         # Test signing to make sure it works
         echo "test" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --clearsign
