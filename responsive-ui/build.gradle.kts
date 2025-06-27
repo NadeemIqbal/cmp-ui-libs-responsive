@@ -120,17 +120,16 @@ publishing {
 
 // Enable GPG signing - Works with GitHub Actions
 signing {
-    val signingKey = System.getenv("GPG_PRIVATE_KEY") ?: findProperty("signing.keyId") as String?
-    val signingPassword = System.getenv("GPG_PASSPHRASE") ?: findProperty("signing.password") as String?
+    val signingKey = System.getenv("GPG_PRIVATE_KEY")
+    val signingPassword = System.getenv("GPG_PASSPHRASE")
     
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(signingKey, signingPassword)
-        sign(publishing.publications)
     } else {
         // Fallback to GPG command for local development
         useGpgCmd()
-        sign(publishing.publications)
     }
+    sign(publishing.publications)
 }
 
 // Task to create bundle for Central Portal

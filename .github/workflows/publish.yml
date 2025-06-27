@@ -29,10 +29,25 @@ jobs:
       uses: gradle/gradle-build-action@v2
       
     - name: Import GPG key
-      uses: crazy-max/ghaction-import-gpg@v6
-      with:
-        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-        passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: |
+        echo "Setting up GPG..."
+        
+        # Create GPG key file
+        echo "$GPG_PRIVATE_KEY" > private.key
+        
+        # Import the key
+        gpg --batch --import private.key
+        
+        # List keys to verify import
+        gpg --list-secret-keys --keyid-format LONG
+        
+        # Clean up
+        rm private.key
+        
+        echo "GPG key imported successfully"
         
     - name: Publish to Maven Central
       env:
