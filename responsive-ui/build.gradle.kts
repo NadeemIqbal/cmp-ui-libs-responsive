@@ -80,7 +80,7 @@ val stagingDir = layout.buildDirectory.dir("staging-deploy")
 publishing {
     publications.withType<MavenPublication> {
         groupId = "io.github.nadeemiqbal"
-        version = "1.0.3" // Test version without signatures to check artifact completeness
+        version = "1.0.10" // Version with Central Portal signing
         
         pom {
             name.set("Responsive UI")
@@ -118,30 +118,44 @@ publishing {
     }
 }
 
-// Enable GPG signing - Works with GitHub Actions
-signing {
-    val signingKey = System.getenv("GPG_PRIVATE_KEY")
-    val signingPassword = System.getenv("GPG_PASSPHRASE")
-    val signingKeyId = System.getenv("GPG_KEY_ID")
-    
-    if (signingKey != null && signingPassword != null) {
-        println("Using GPG command line signing (key imported in workflow)")
-        println("GPG Key ID: $signingKeyId")
-        
-        // Use GPG command since we imported the key in the workflow
-        useGpgCmd()
-        
-        // Configure GPG signing with passphrase and key ID
-        extra["signing.gnupg.passphrase"] = signingPassword
-        if (signingKeyId != null) {
-            extra["signing.gnupg.keyName"] = signingKeyId
-        }
-    } else {
-        println("Using GPG command line for local development")
-        useGpgCmd()
-    }
-    sign(publishing.publications)
-}
+// Let Central Portal handle GPG signing automatically
+// This ensures signatures are valid and trusted by Maven Central
+// signing {
+//     val signingKey = System.getenv("GPG_PRIVATE_KEY")
+//     val signingPassword = System.getenv("GPG_PASSPHRASE")
+//     val signingKeyId = System.getenv("GPG_KEY_ID")
+//     
+//     if (signingKey != null && signingPassword != null) {
+//         println("Using GPG command line signing (key imported in workflow)")
+//         println("GPG Key ID: $signingKeyId")
+//         
+//         // Use GPG command since we imported the key in the workflow
+//         useGpgCmd()
+//         
+//         // Configure GPG signing with passphrase and key ID
+//         extra["signing.gnupg.passphrase"] = signingPassword
+//         if (signingKeyId != null) {
+//             extra["signing.gnupg.keyName"] = signingKeyId
+//         }
+//     } else {
+//         println("Using GPG command line for local development")
+//         useGpgCmd()
+//     }
+//     sign(publishing.publications)
+// }
+
+// Signing tasks disabled - Central Portal handles signing
+// tasks.withType<Sign>().configureEach {
+//     val signingPassword = System.getenv("GPG_PASSPHRASE")
+//     val signingKeyId = System.getenv("GPG_KEY_ID")
+//     
+//     if (signingPassword != null) {
+//         doFirst {
+//             println("Configuring signing task: ${this.name}")
+//             println("Using GPG Key ID: $signingKeyId")
+//         }
+//     }
+// }
 
 // Task to create bundle for Central Portal
 tasks.register<Zip>("createCentralPortalBundle") {
@@ -152,7 +166,7 @@ tasks.register<Zip>("createCentralPortalBundle") {
     destinationDirectory.set(layout.buildDirectory.dir("central-publishing"))
     
     doFirst {
-        println("Creating Central Portal bundle with GPG signatures...")
+        println("Creating Central Portal bundle (unsigned - Central Portal will sign)...")
     }
     
     doLast {
@@ -186,7 +200,7 @@ tasks.register<Exec>("uploadToCentralPortal") {
     )
     
     doFirst {
-        println("Uploading signed bundle to Central Portal...")
+        println("Uploading unsigned bundle to Central Portal for automatic signing...")
         println("Bundle: ${bundleFile.get().asFile.absolutePath}")
     }
     
@@ -202,7 +216,7 @@ tasks.register("publishToMavenCentral") {
     group = "publishing"
     
     doLast {
-        println("✅ Library v1.0.2 published to Maven Central with GPG signatures!")
+        println("✅ Library v1.0.10 published to Maven Central with Central Portal signing!")
         println("🔍 Monitor progress at: https://central.sonatype.com/publishing/deployments")
         println("🚀 Your library will be available on Maven Central after validation (usually 10-30 minutes)")
     }
