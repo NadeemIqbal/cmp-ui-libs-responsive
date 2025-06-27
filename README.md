@@ -28,7 +28,7 @@ allprojects {
 **In your module `build.gradle.kts`:**
 ```kotlin
 dependencies {
-    implementation("com.github.NadeemIqbal:cmp-ui-libs-responsive:0.0.3")
+    implementation("com.github.NadeemIqbal:cmp-ui-libs-responsive:0.0.4")
 }
 ```
 
