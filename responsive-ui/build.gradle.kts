@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.nadeemiqbal"
-version = "0.0.4"
+version = "0.0.5"
 
 android {
     namespace = "com.nadeem.responsiveui"
@@ -36,8 +36,14 @@ kotlin {
     }
 
     jvm("desktop")
+    
+    // Enable JavaScript platform
+    js(IR) {
+        browser()
+        binaries.executable()
+    }
 
-    // Disable WebAssembly for JitPack builds to avoid dependency issues
+    // Enable WebAssembly (optional - can be enabled if needed)
     // @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     // wasmJs {
     //     browser()
@@ -66,6 +72,12 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+            }
+        }
+        
+        val jsMain by getting {
+            dependencies {
+                implementation(compose.html.core)
             }
         }
     }

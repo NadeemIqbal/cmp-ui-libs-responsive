@@ -17,6 +17,7 @@ dependencyResolutionManagement {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-nodejs/maven")
+    maven("https://jitpack.io") // Added for remote dependency
   }
 }
 
@@ -30,6 +31,7 @@ plugins {
 rootProject.name = "responsive-ui-sample"
 include(":responsive-ui")
 include(":example")
+include(":example-remote")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
