@@ -26,23 +26,32 @@ A **Kotlin Multiplatform Compose** library that provides Flutter-like responsive
 
 ## 📦 Installation
 
-Add the dependency to your `build.gradle.kts`:
+### Via JitPack (Recommended - No GPG Required!)
 
+Add JitPack repository to your project:
+
+**In your root `build.gradle.kts`:**
 ```kotlin
-dependencies {
-    implementation("com.nadeemiqbal:responsive-ui:1.0.0")
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io") // Add this line
+    }
 }
 ```
 
-For Kotlin Multiplatform projects:
-
+**In your module `build.gradle.kts`:**
 ```kotlin
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            implementation("com.nadeemiqbal:responsive-ui:1.0.0")
-        }
-    }
+dependencies {
+    implementation("com.github.NadeemIqbal:cmp-ui-libs-responsive:v1.0.11")
+}
+```
+
+### Via Maven Central (When Available)
+```kotlin
+dependencies {
+    implementation("io.github.nadeemiqbal:responsive-ui:1.0.11")
 }
 ```
 

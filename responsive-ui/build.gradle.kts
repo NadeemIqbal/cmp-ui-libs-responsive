@@ -79,8 +79,8 @@ val stagingDir = layout.buildDirectory.dir("staging-deploy")
 
 publishing {
     publications.withType<MavenPublication> {
-        groupId = "io.github.nadeemiqbal"
-        version = "1.0.11" // Version with fixed GPG signing
+        groupId = "com.github.nadeemiqbal"
+        version = "1.0.11"
         
         pom {
             name.set("Responsive UI")
