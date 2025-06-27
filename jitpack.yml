@@ -5,4 +5,5 @@ before_install:
   - sdk use java 17.0.2-open
 install:
   - echo "android.useAndroidX=true" >> gradle.properties
-  - ./gradlew clean -Pgroup=com.github.NadeemIqbal -Pversion=$JITPACK_VERSION -xtest -xlint assemble publishToMavenLocal 
+  - echo "org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError" >> gradle.properties
+  - ./gradlew :responsive-ui:assemble :responsive-ui:publishToMavenLocal -Pgroup=com.github.NadeemIqbal -Pversion=$JITPACK_VERSION --no-daemon --no-configuration-cache 
