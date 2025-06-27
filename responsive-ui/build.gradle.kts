@@ -80,7 +80,7 @@ val stagingDir = layout.buildDirectory.dir("staging-deploy")
 publishing {
     publications.withType<MavenPublication> {
         groupId = "io.github.nadeemiqbal"
-        version = "1.0.10" // Version with Central Portal signing
+        version = "1.0.11" // Version with fixed GPG signing
         
         pom {
             name.set("Responsive UI")
@@ -118,44 +118,41 @@ publishing {
     }
 }
 
-// Let Central Portal handle GPG signing automatically
-// This ensures signatures are valid and trusted by Maven Central
-// signing {
-//     val signingKey = System.getenv("GPG_PRIVATE_KEY")
-//     val signingPassword = System.getenv("GPG_PASSPHRASE")
-//     val signingKeyId = System.getenv("GPG_KEY_ID")
-//     
-//     if (signingKey != null && signingPassword != null) {
-//         println("Using GPG command line signing (key imported in workflow)")
-//         println("GPG Key ID: $signingKeyId")
-//         
-//         // Use GPG command since we imported the key in the workflow
-//         useGpgCmd()
-//         
-//         // Configure GPG signing with passphrase and key ID
-//         extra["signing.gnupg.passphrase"] = signingPassword
-//         if (signingKeyId != null) {
-//             extra["signing.gnupg.keyName"] = signingKeyId
-//         }
-//     } else {
-//         println("Using GPG command line for local development")
-//         useGpgCmd()
-//     }
-//     sign(publishing.publications)
-// }
+// GPG signing is required for Maven Central
+signing {
+    val signingKey = System.getenv("GPG_PRIVATE_KEY")
+    val signingPassword = System.getenv("GPG_PASSPHRASE")
+    val signingKeyId = System.getenv("GPG_KEY_ID")
+    
+    if (signingKey != null && signingPassword != null) {
+        println("✅ Using in-memory GPG signing with imported key")
+        println("GPG Key ID: $signingKeyId")
+        
+        // Use in-memory signing to avoid GPG agent issues
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        
+        // Set the key ID if provided
+        if (signingKeyId != null) {
+            extra["signing.keyId"] = signingKeyId
+        }
+    } else {
+        println("⚠️ Using GPG command line for local development")
+        useGpgCmd()
+    }
+    sign(publishing.publications)
+}
 
-// Signing tasks disabled - Central Portal handles signing
-// tasks.withType<Sign>().configureEach {
-//     val signingPassword = System.getenv("GPG_PASSPHRASE")
-//     val signingKeyId = System.getenv("GPG_KEY_ID")
-//     
-//     if (signingPassword != null) {
-//         doFirst {
-//             println("Configuring signing task: ${this.name}")
-//             println("Using GPG Key ID: $signingKeyId")
-//         }
-//     }
-// }
+// Configure signing tasks
+tasks.withType<Sign>().configureEach {
+    val signingPassword = System.getenv("GPG_PASSPHRASE")
+    val signingKeyId = System.getenv("GPG_KEY_ID")
+    
+    if (signingPassword != null) {
+        doFirst {
+            println("🔐 Signing ${this.name} with key: $signingKeyId")
+        }
+    }
+}
 
 // Task to create bundle for Central Portal
 tasks.register<Zip>("createCentralPortalBundle") {
@@ -166,7 +163,7 @@ tasks.register<Zip>("createCentralPortalBundle") {
     destinationDirectory.set(layout.buildDirectory.dir("central-publishing"))
     
     doFirst {
-        println("Creating Central Portal bundle (unsigned - Central Portal will sign)...")
+        println("Creating Central Portal bundle with GPG signatures...")
     }
     
     doLast {
@@ -200,7 +197,7 @@ tasks.register<Exec>("uploadToCentralPortal") {
     )
     
     doFirst {
-        println("Uploading unsigned bundle to Central Portal for automatic signing...")
+        println("Uploading signed bundle to Central Portal...")
         println("Bundle: ${bundleFile.get().asFile.absolutePath}")
     }
     
@@ -216,7 +213,7 @@ tasks.register("publishToMavenCentral") {
     group = "publishing"
     
     doLast {
-        println("✅ Library v1.0.10 published to Maven Central with Central Portal signing!")
+        println("✅ Library v1.0.11 published to Maven Central with GPG signatures!")
         println("🔍 Monitor progress at: https://central.sonatype.com/publishing/deployments")
         println("🚀 Your library will be available on Maven Central after validation (usually 10-30 minutes)")
     }
