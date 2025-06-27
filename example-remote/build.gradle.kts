@@ -26,16 +26,15 @@ kotlin {
 
     jvm("desktop")
     
-    // JavaScript support will be available once version 0.0.5+ is published
-    // js(IR) {
-    //     moduleName = "example-remote"
-    //     browser {
-    //         commonWebpackConfig {
-    //             outputFileName = "example-remote.js"
-    //         }
-    //     }
-    //     binaries.executable()
-    // }
+    js(IR) {
+        moduleName = "example-remote"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "example-remote.js"
+            }
+        }
+        binaries.executable()
+    }
 
     sourceSets {
         val desktopMain by getting
@@ -46,7 +45,7 @@ kotlin {
         }
         commonMain.dependencies {
             // Using the remote dependency instead of local project reference
-            implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:0.0.4")
+            implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:v0.0.5")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -63,12 +62,11 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
-        // JavaScript support will be available once version 0.0.5+ is published
-        // val jsMain by getting {
-        //     dependencies {
-        //         implementation(compose.html.core)
-        //     }
-        // }
+        val jsMain by getting {
+            dependencies {
+                implementation(compose.html.core)
+            }
+        }
     }
 }
 

@@ -7,7 +7,7 @@ This example demonstrates how to use the Responsive UI library from a remote dep
 Instead of using a local project reference, this example uses the published library from JitPack:
 
 ```kotlin
-implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:0.0.4")
+implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:v0.0.5")
 ```
 
 ## Supported Platforms
@@ -15,7 +15,7 @@ implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:0.0.
 - **Android** - Native Android application
 - **Desktop** - JVM desktop application using Compose Desktop  
 
-> **Note**: iOS and JavaScript/Web platforms are not available in the remote dependency version 0.0.4. Only Android and Desktop platforms are currently supported. JavaScript/Web support will be available in version 0.0.5+.
+> **Note**: iOS platform is not available in the remote dependency version v0.0.5. Android, Desktop, and JavaScript/Web platforms are supported.
 
 ## Running the Examples
 
@@ -29,9 +29,8 @@ implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:0.0.
 ./gradlew :example-remote:run
 ```
 
-### JavaScript/Web (Available in v0.0.5+)
+### JavaScript/Web
 ```bash
-# Will be available once version 0.0.5+ is published
 ./gradlew :example-remote:jsBrowserDevelopmentRun
 ```
 

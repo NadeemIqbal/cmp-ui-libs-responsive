@@ -7,8 +7,10 @@ plugins {
     `maven-publish`
 }
 
+
+
 group = "com.github.nadeemiqbal"
-version = "0.0.5"
+version = "0.0.6"
 
 android {
     namespace = "com.nadeem.responsiveui"
@@ -41,6 +43,7 @@ kotlin {
     js(IR) {
         browser()
         binaries.executable()
+        useCommonJs()
     }
 
     // Enable WebAssembly (optional - can be enabled if needed)
@@ -82,6 +85,8 @@ kotlin {
         }
     }
 }
+
+
 
 publishing {
     publications.withType<MavenPublication> {
