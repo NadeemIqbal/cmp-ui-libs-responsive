@@ -124,9 +124,14 @@ signing {
     val signingPassword = System.getenv("GPG_PASSPHRASE")
     
     if (signingKey != null && signingPassword != null) {
-        useInMemoryPgpKeys(signingKey, signingPassword)
+        println("Using GPG command line signing (key imported in workflow)")
+        // Use GPG command since we imported the key in the workflow
+        useGpgCmd()
+        
+        // Configure GPG signing with passphrase
+        extra["signing.gnupg.passphrase"] = signingPassword
     } else {
-        // Fallback to GPG command for local development
+        println("Using GPG command line for local development")
         useGpgCmd()
     }
     sign(publishing.publications)

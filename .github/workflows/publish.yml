@@ -41,13 +41,24 @@ jobs:
         # Import the key
         gpg --batch --import private.key
         
+        # Configure GPG for non-interactive use
+        echo "use-agent" >> ~/.gnupg/gpg.conf
+        echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+        
+        # Set up GPG agent with passphrase
+        echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+        gpgconf --reload gpg-agent
+        
         # List keys to verify import
         gpg --list-secret-keys --keyid-format LONG
+        
+        # Test signing to make sure it works
+        echo "test" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --clearsign
         
         # Clean up
         rm private.key
         
-        echo "GPG key imported successfully"
+        echo "GPG key imported and configured successfully"
         
     - name: Publish to Maven Central
       env:
