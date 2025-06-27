@@ -2,4 +2,7 @@ jdk:
   - openjdk17
 before_install:
   - sdk install java 17.0.2-open
-  - sdk use java 17.0.2-open 
+  - sdk use java 17.0.2-open
+install:
+  - echo "android.useAndroidX=true" >> gradle.properties
+  - ./gradlew clean -Pgroup=com.github.NadeemIqbal -Pversion=$JITPACK_VERSION -xtest -xlint assemble publishToMavenLocal 
