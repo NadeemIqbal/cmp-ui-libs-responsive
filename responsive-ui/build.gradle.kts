@@ -1,59 +1,199 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import java.util.Base64
+
 plugins {
-  id("com.eygraber.conventions-kotlin-multiplatform")
-  id("com.eygraber.conventions-android-library")
-  id("com.eygraber.conventions-compose-jetbrains")
-  id("com.eygraber.conventions-detekt")
-  id("com.eygraber.conventions-publish-maven-central")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.composeMultiplatform)
+    id("com.eygraber.conventions-detekt")
+    `maven-publish`
+    signing
 }
 
+group = "io.github.nadeemiqbal"
+version = "1.0.3"
+
 android {
-  namespace = "com.nadeem.responsiveui"
-  compileSdk = 35
+    namespace = "com.nadeem.responsiveui"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+    
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
 kotlin {
-  androidTarget()
-
-  js(IR) {
-    browser()
-  }
-
-  sourceSets {
-    commonMain {
-      dependencies {
-        implementation(compose.runtime)
-        implementation(compose.foundation)
-        implementation(compose.material)
-      }
+    androidTarget {
+        publishLibraryVariants("release")
     }
 
-    androidMain {
-      dependencies {
-        // Compose BOM ensures all versions are aligned
-//        implementation(platform("androidx.compose:compose-bom:2025.05.00")) // New way
-        implementation("androidx.compose.ui:ui")
-        implementation("androidx.compose.material:material")
-        implementation("androidx.compose.foundation:foundation")
-      }
+    jvm("desktop")
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
-    jsMain {
-      dependencies {
-        implementation(compose.html.core)
-      }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.material3)
+            }
+        }
+        
+        androidMain {
+            dependencies {
+                implementation(compose.ui)
+                implementation(compose.material)
+                implementation(compose.material3)
+                implementation(compose.foundation)
+            }
+        }
+        
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+            }
+        }
     }
-
-    commonTest {
-      dependencies {
-        implementation(kotlin("test-common"))
-        implementation(kotlin("test-annotations-common"))
-      }
-    }
-  }
 }
 
-//compose {
-////  html {
-////    // You can add settings like outputDir, etc. here
-////  }
-//}
+// Create staging repository for bundle creation
+val stagingDir = layout.buildDirectory.dir("staging-deploy")
+
+publishing {
+    publications.withType<MavenPublication> {
+        groupId = "io.github.nadeemiqbal"
+        version = "1.0.3" // Test version without signatures to check artifact completeness
+        
+        pom {
+            name.set("Responsive UI")
+            description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
+            url.set("https://github.com/NadeemIqbal/responsive-ui")
+            
+            licenses {
+                license {
+                    name.set("The Apache License, Version 2.0")
+                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+            }
+            
+            developers {
+                developer {
+                    id.set("NadeemIqbal")
+                    name.set("Nadeem Iqbal")
+                    email.set("mr_nadeem_iqbal@yahoo.com")
+                }
+            }
+            
+            scm {
+                connection.set("scm:git:git://github.com/NadeemIqbal/responsive-ui.git")
+                developerConnection.set("scm:git:ssh://github.com/NadeemIqbal/responsive-ui.git")
+                url.set("https://github.com/NadeemIqbal/responsive-ui")
+            }
+        }
+    }
+    
+    repositories {
+        maven {
+            name = "Staging"
+            url = stagingDir.get().asFile.toURI()
+        }
+    }
+}
+
+// Enable GPG signing - Works with GitHub Actions
+signing {
+    val signingKey = System.getenv("GPG_PRIVATE_KEY") ?: findProperty("signing.keyId") as String?
+    val signingPassword = System.getenv("GPG_PASSPHRASE") ?: findProperty("signing.password") as String?
+    
+    if (signingKey != null && signingPassword != null) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign(publishing.publications)
+    } else {
+        // Fallback to GPG command for local development
+        useGpgCmd()
+        sign(publishing.publications)
+    }
+}
+
+// Task to create bundle for Central Portal
+tasks.register<Zip>("createCentralPortalBundle") {
+    dependsOn("publishAllPublicationsToStagingRepository")
+    
+    from(stagingDir)
+    archiveFileName.set("central-bundle.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("central-publishing"))
+    
+    doFirst {
+        println("Creating Central Portal bundle with GPG signatures...")
+    }
+    
+    doLast {
+        println("Bundle created: ${archiveFile.get().asFile.absolutePath}")
+    }
+}
+
+// Upload bundle to Central Portal
+tasks.register<Exec>("uploadToCentralPortal") {
+    dependsOn("createCentralPortalBundle")
+    
+    val bundleFile = layout.buildDirectory.file("central-publishing/central-bundle.zip")
+    val username = findProperty("centralPortalUsername") as String? ?: System.getenv("CENTRAL_PORTAL_USERNAME")
+    val password = findProperty("centralPortalPassword") as String? ?: System.getenv("CENTRAL_PORTAL_PASSWORD")
+    
+    if (username == null || password == null) {
+        throw GradleException("Central Portal credentials not found. Set centralPortalUsername and centralPortalPassword in gradle.properties")
+    }
+    
+    val credentials = "$username:$password".toByteArray().let { 
+        Base64.getEncoder().encodeToString(it)
+    }
+    
+    // Use curl to upload the bundle
+    commandLine(
+        "curl", "-X", "POST",
+        "--header", "Authorization: Bearer $credentials",
+        "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
+        "--form", "publishingType=AUTOMATIC",
+        "https://central.sonatype.com/api/v1/publisher/upload"
+    )
+    
+    doFirst {
+        println("Uploading signed bundle to Central Portal...")
+        println("Bundle: ${bundleFile.get().asFile.absolutePath}")
+    }
+    
+    doLast {
+        println("Upload completed! Check status at: https://central.sonatype.com/publishing/deployments")
+    }
+}
+
+// Main automated publishing task
+tasks.register("publishToMavenCentral") {
+    dependsOn("uploadToCentralPortal")
+    description = "Publishes the library to Maven Central automatically via Central Portal with GPG signing"
+    group = "publishing"
+    
+    doLast {
+        println("✅ Library v1.0.2 published to Maven Central with GPG signatures!")
+        println("🔍 Monitor progress at: https://central.sonatype.com/publishing/deployments")
+        println("🚀 Your library will be available on Maven Central after validation (usually 10-30 minutes)")
+    }
+}

@@ -3,56 +3,35 @@ import com.eygraber.conventions.repositories.addCommonRepositories
 
 pluginManagement {
   repositories {
-    google {
-      content {
-        includeGroupByRegex("com\\.google.*")
-        includeGroupByRegex("com\\.android.*")
-        includeGroupByRegex("androidx.*")
-      }
-    }
-
+    google()
     mavenCentral()
-
-    maven("https://oss.sonatype.org/content/repositories/snapshots") {
-      mavenContent {
-        snapshotsOnly()
-      }
-    }
-
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots") {
-      mavenContent {
-        snapshotsOnly()
-      }
-    }
-
     gradlePluginPortal()
+    maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-nodejs/maven")
+
   }
 }
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-  // comment this out for now because it doesn't work with KMP js
-  // https://youtrack.jetbrains.com/issue/KT-55620/KJS-Gradle-plugin-doesnt-support-repositoriesMode
-  // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-
+  repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
   repositories {
-    addCommonRepositories(
-      includeMavenCentral = true,
-      includeMavenCentralSnapshots = true,
-      includeGoogle = true,
-      includeJetbrainsComposeDev = false,
-    )
+    google()
+    mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-nodejs/maven")
+
   }
 }
 
 plugins {
   id("com.eygraber.conventions.settings") version "0.0.86"
   id("com.gradle.develocity") version "4.0.2"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = "cmp-ui-libs"
 
-include("responsive-ui")
+rootProject.name = "responsive-ui-sample"
+include(":responsive-ui")
+include(":example")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
