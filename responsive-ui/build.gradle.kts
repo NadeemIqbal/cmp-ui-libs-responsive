@@ -107,7 +107,11 @@ kotlin {
         publishLibraryVariants("release")
     }
 
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
     
     // Enable JavaScript platform
     js(IR) {
@@ -167,6 +171,14 @@ publishing {
     }
     
     publications.withType<MavenPublication> {
+        // Add Javadoc jar for all publications
+        val javadocJar = tasks.register("${name}JavadocJar", Jar::class) {
+            archiveClassifier.set("javadoc")
+            // Create empty javadoc jar as placeholder
+            from(layout.buildDirectory.dir("docs/javadoc"))
+        }
+        artifact(javadocJar)
+        
         pom {
             name.set("Responsive UI")
             description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
