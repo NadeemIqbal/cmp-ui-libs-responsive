@@ -31,6 +31,11 @@ signing {
     sign(publishing.publications)
 }
 
+// Ensure signing tasks depend on Javadoc tasks
+tasks.withType<Sign>().configureEach {
+    dependsOn(tasks.withType<Jar>().matching { it.name.endsWith("JavadocJar") })
+}
+
 // Task to create bundle for Central Portal
 tasks.register<Zip>("createCentralPortalBundle") {
     dependsOn("publishAllPublicationsToStagingRepository")
@@ -177,11 +182,16 @@ publishing {
     }
     
     publications.withType<MavenPublication> {
-        // Add Javadoc jar for all publications
+        // Add unique Javadoc jar for each publication
         val javadocJar = tasks.register("${name}JavadocJar", Jar::class) {
             archiveClassifier.set("javadoc")
+            archiveBaseName.set("${project.name}-${name}")
             // Create empty javadoc jar as placeholder
             from(layout.buildDirectory.dir("docs/javadoc"))
+            doFirst {
+                // Ensure the javadoc directory exists
+                layout.buildDirectory.dir("docs/javadoc").get().asFile.mkdirs()
+            }
         }
         artifact(javadocJar)
         
