@@ -8,8 +8,74 @@ plugins {
     signing
 }
 
-// Apply Maven Central configuration
-apply(from = "../maven-central-config.gradle.kts")
+// Maven Central publishing configuration
+val stagingDir = layout.buildDirectory.dir("staging-deploy")
+
+// GPG signing configuration
+signing {
+    val signingKey = System.getenv("GPG_PRIVATE_KEY")?.replace("\\n", "\n")
+    val signingPassword = System.getenv("GPG_PASSPHRASE")
+    
+    if (signingKey != null && signingPassword != null) {
+        println("✅ Using in-memory GPG signing")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    } else {
+        println("⚠️ Using GPG command line for local development")
+        useGpgCmd()
+    }
+    sign(publishing.publications)
+}
+
+// Task to create bundle for Central Portal
+tasks.register<Zip>("createCentralPortalBundle") {
+    dependsOn("publishAllPublicationsToStagingRepository")
+    
+    from(stagingDir)
+    archiveFileName.set("central-bundle.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("central-publishing"))
+    
+    doLast {
+        println("Bundle created: ${archiveFile.get().asFile.absolutePath}")
+    }
+}
+
+// Upload bundle to Central Portal using curl
+tasks.register<Exec>("uploadToCentralPortal") {
+    dependsOn("createCentralPortalBundle")
+    
+    val bundleFile = layout.buildDirectory.file("central-publishing/central-bundle.zip")
+    val username = System.getenv("CENTRAL_PORTAL_USERNAME")
+    val password = System.getenv("CENTRAL_PORTAL_PASSWORD")
+    
+    if (username == null || password == null) {
+        throw GradleException("Central Portal credentials not found")
+    }
+    
+    val credentials = java.util.Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+    
+    commandLine(
+        "curl", "-X", "POST",
+        "--header", "Authorization: Bearer $credentials",
+        "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
+        "--form", "publishingType=AUTOMATIC",
+        "https://central.sonatype.com/api/v1/publisher/upload"
+    )
+    
+    doLast {
+        println("Upload completed! Check status at: https://central.sonatype.com/publishing/deployments")
+    }
+}
+
+// Main automated publishing task
+tasks.register("publishToMavenCentral") {
+    dependsOn("uploadToCentralPortal")
+    description = "Publishes the library to Maven Central automatically"
+    group = "publishing"
+    
+    doLast {
+        println("✅ Library published to Maven Central!")
+    }
+}
 
 
 
