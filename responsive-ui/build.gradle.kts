@@ -51,11 +51,10 @@ tasks.register<Exec>("uploadToCentralPortal") {
         throw GradleException("Central Portal credentials not found")
     }
     
-    val credentials = java.util.Base64.getEncoder().encodeToString("$username:$password".toByteArray())
-    
+    // Use curl with basic auth directly instead of manually encoding
     commandLine(
         "curl", "-X", "POST",
-        "--header", "Authorization: Bearer $credentials",
+        "--user", "$username:$password",
         "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
         "--form", "publishingType=AUTOMATIC",
         "https://central.sonatype.com/api/v1/publisher/upload"
