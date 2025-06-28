@@ -64,9 +64,8 @@ jobs:
         echo "GPG_KEY_ID=$GPG_KEY_ID" >> $GITHUB_ENV
         
         # Export the private key in proper format for Gradle
-        GPG_KEY_FOR_GRADLE=$(echo -e "${GPG_PRIVATE_KEY//\\\\n/\\n}")
         echo "GPG_PRIVATE_KEY_GRADLE<<EOF" >> $GITHUB_ENV
-        echo "$GPG_KEY_FOR_GRADLE" >> $GITHUB_ENV
+        echo -e "${GPG_PRIVATE_KEY//\\\\n/\\n}" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
         
         # Test signing to make sure it works
