@@ -39,8 +39,9 @@ jobs:
       run: |
         echo "Setting up GPG..."
         
-        # Create GPG key file
-        echo "$GPG_PRIVATE_KEY" > private.key
+        # Create GPG key file with proper newline handling
+        # Replace \\n with actual newlines
+        echo "$GPG_PRIVATE_KEY" | sed 's/\\n/\n/g' > private.key
         
         # Import the key
         gpg --batch --import private.key

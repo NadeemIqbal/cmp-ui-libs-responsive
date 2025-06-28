@@ -45,7 +45,7 @@ kotlin {
         }
         commonMain.dependencies {
             // Using the remote dependency instead of local project reference
-            implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:v0.0.5")
+            implementation("com.github.NadeemIqbal.cmp-ui-libs-responsive:responsive-ui:v0.0.6")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
