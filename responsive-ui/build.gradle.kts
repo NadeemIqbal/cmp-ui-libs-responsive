@@ -5,7 +5,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     id("com.eygraber.conventions-detekt")
     `maven-publish`
+    signing
 }
+
+// Apply Maven Central configuration
+apply(from = "../maven-central-config.gradle.kts")
 
 
 
@@ -89,6 +93,13 @@ kotlin {
 
 
 publishing {
+    repositories {
+        maven {
+            name = "staging"
+            url = uri(layout.buildDirectory.dir("staging-deploy"))
+        }
+    }
+    
     publications.withType<MavenPublication> {
         pom {
             name.set("Responsive UI")
