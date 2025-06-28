@@ -63,6 +63,12 @@ jobs:
         echo "Using GPG Key ID: $GPG_KEY_ID"
         echo "GPG_KEY_ID=$GPG_KEY_ID" >> $GITHUB_ENV
         
+        # Export the private key in proper format for Gradle
+        GPG_KEY_FOR_GRADLE=$(echo -e "${GPG_PRIVATE_KEY//\\\\n/\\n}")
+        echo "GPG_PRIVATE_KEY_GRADLE<<EOF" >> $GITHUB_ENV
+        echo "$GPG_KEY_FOR_GRADLE" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+        
         # Test signing to make sure it works
         echo "test" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --clearsign
         
@@ -76,6 +82,8 @@ jobs:
         CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
         CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        GPG_KEY_ID: ${{ env.GPG_KEY_ID }}
+        GPG_PRIVATE_KEY_GRADLE: ${{ env.GPG_PRIVATE_KEY_GRADLE }}
         PUBLISH_VERSION: ${{ github.event.inputs.version || github.ref_name }}
       run: |
         # Set version from input or tag

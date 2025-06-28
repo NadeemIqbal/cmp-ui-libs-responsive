@@ -13,12 +13,13 @@ val stagingDir = layout.buildDirectory.dir("staging-deploy")
 
 // GPG signing configuration
 signing {
-    val signingKey = System.getenv("GPG_PRIVATE_KEY")?.replace("\\n", "\n")
+    val signingKey = System.getenv("GPG_PRIVATE_KEY_GRADLE") ?: System.getenv("GPG_PRIVATE_KEY")?.replace("\\n", "\n")
     val signingPassword = System.getenv("GPG_PASSPHRASE")
+    val signingKeyId = System.getenv("GPG_KEY_ID")
     
     if (signingKey != null && signingPassword != null) {
-        println("✅ Using in-memory GPG signing")
-        useInMemoryPgpKeys(signingKey, signingPassword)
+        println("✅ Using in-memory GPG signing with key ID: $signingKeyId")
+        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
     } else {
         println("⚠️ Using GPG command line for local development")
         useGpgCmd()
