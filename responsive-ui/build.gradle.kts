@@ -78,7 +78,7 @@ tasks.register("publishToMavenCentral") {
 
 
 
-group = "com.github.nadeemiqbal"
+group = "io.github.nadeemiqbal"
 version = "0.0.6"
 
 android {
