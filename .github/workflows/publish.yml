@@ -58,10 +58,12 @@ jobs:
         echo "Available GPG keys:"
         gpg --list-secret-keys --keyid-format LONG
         
-        # Get the key ID and export it for Gradle
-        GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | cut -d'/' -f2)
-        echo "Using GPG Key ID: $GPG_KEY_ID"
-        echo "GPG_KEY_ID=$GPG_KEY_ID" >> $GITHUB_ENV
+        # Get the key ID and export it for Gradle (use short format - last 8 characters)
+        GPG_KEY_ID_LONG=$(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | cut -d'/' -f2)
+        GPG_KEY_ID_SHORT=${GPG_KEY_ID_LONG: -8}
+        echo "Using GPG Key ID (long): $GPG_KEY_ID_LONG"
+        echo "Using GPG Key ID (short): $GPG_KEY_ID_SHORT"
+        echo "GPG_KEY_ID=$GPG_KEY_ID_SHORT" >> $GITHUB_ENV
         
         # Export the private key in proper format for Gradle
         echo "GPG_PRIVATE_KEY_GRADLE<<EOF" >> $GITHUB_ENV
