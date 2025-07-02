@@ -10,6 +10,30 @@ A Kotlin Multiplatform Compose library that provides Flutter-like responsive lay
 
 ## Installation
 
+### Via Maven Central (Recommended)
+```kotlin
+dependencies {
+    implementation("io.github.nadeemiqbal:responsive-ui:0.0.7")
+}
+```
+
+### Via JFrog Artifactory
+```kotlin
+repositories {
+    maven {
+        url = uri("https://your-company.jfrog.io/artifactory/your-repo")
+        credentials {
+            username = "your-username"
+            password = "your-password"
+        }
+    }
+}
+
+dependencies {
+    implementation("io.github.nadeemiqbal:responsive-ui:0.0.7")
+}
+```
+
 ### Via JitPack
 
 Add JitPack repository to your project:
@@ -64,6 +88,26 @@ To build the library locally:
 To run tests:
 ```bash
 ./gradlew test
+```
+
+## Publishing
+
+This library supports publishing to multiple repositories:
+
+- **Maven Central**: See [PUBLISHING.md](PUBLISHING.md)
+- **JFrog Artifactory**: See [JFROG_PUBLISHING.md](JFROG_PUBLISHING.md)
+- **JitPack**: Automatic via GitHub tags
+
+### Quick Publishing Commands
+```bash
+# Publish to Maven Central
+./gradlew publishToMavenCentral
+
+# Publish to JFrog Artifactory
+./gradlew publishToJFrogArtifactory
+
+# Publish to both repositories
+./gradlew publishToBoth
 ```
 
 ## License

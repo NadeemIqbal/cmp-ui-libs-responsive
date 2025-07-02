@@ -30,6 +30,10 @@ pnpm-lock.yaml
 # Secrets and keys
 secret.key
 signing_key.txt
+converted-key.txt
+key.gpg
+*.key
+*.gpg
 
 # Danger output
 danger_out.json

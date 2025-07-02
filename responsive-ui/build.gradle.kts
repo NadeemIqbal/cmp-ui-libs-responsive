@@ -64,21 +64,24 @@ tasks.register<Exec>("uploadToCentralPortal") {
     dependsOn("createCentralPortalBundle")
     
     val bundleFile = layout.buildDirectory.file("central-publishing/central-bundle.zip")
-    val username = System.getenv("CENTRAL_PORTAL_USERNAME")
-    val password = System.getenv("CENTRAL_PORTAL_PASSWORD")
     
-    if (username == null || password == null) {
-        throw GradleException("Central Portal credentials not found")
+    doFirst {
+        val username = System.getenv("CENTRAL_PORTAL_USERNAME")
+        val password = System.getenv("CENTRAL_PORTAL_PASSWORD")
+        
+        if (username == null || password == null) {
+            throw GradleException("Central Portal credentials not found")
+        }
+        
+        // Set command line dynamically in doFirst
+        commandLine(
+            "curl", "-X", "POST",
+            "--user", "$username:$password",
+            "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
+            "--form", "publishingType=AUTOMATIC",
+            "https://central.sonatype.com/api/v1/publisher/upload"
+        )
     }
-    
-    // Use curl with basic auth directly instead of manually encoding
-    commandLine(
-        "curl", "-X", "POST",
-        "--user", "$username:$password",
-        "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
-        "--form", "publishingType=AUTOMATIC",
-        "https://central.sonatype.com/api/v1/publisher/upload"
-    )
     
     doLast {
         println("Upload completed! Check status at: https://central.sonatype.com/publishing/deployments")
@@ -96,7 +99,47 @@ tasks.register("publishToMavenCentral") {
     }
 }
 
+// JFrog Artifactory publishing tasks
+tasks.register("publishToJFrogArtifactory") {
+    dependsOn("publishAllPublicationsToJFrogArtifactoryRepository")
+    description = "Publishes the library to JFrog Artifactory"
+    group = "publishing"
+    
+    doFirst {
+        val jfrogUrl = System.getenv("JFROG_ARTIFACTORY_URL")
+        val jfrogUsername = System.getenv("JFROG_USERNAME") ?: project.findProperty("jfrog.username")
+        val jfrogPassword = System.getenv("JFROG_PASSWORD") ?: project.findProperty("jfrog.password")
+        
+        if (jfrogUrl == null || jfrogUsername == null || jfrogPassword == null) {
+            throw GradleException("""
+                JFrog Artifactory credentials not found. Please set:
+                - JFROG_ARTIFACTORY_URL (e.g., https://your-company.jfrog.io/artifactory/your-repo)
+                - JFROG_USERNAME 
+                - JFROG_PASSWORD
+                
+                Or add to gradle.properties:
+                - jfrog.username=your-username
+                - jfrog.password=your-password
+            """.trimIndent())
+        }
+    }
+    
+    doLast {
+        println("✅ Library published to JFrog Artifactory!")
+        println("Repository URL: ${System.getenv("JFROG_ARTIFACTORY_URL")}")
+    }
+}
 
+// Publish to both repositories
+tasks.register("publishToBoth") {
+    dependsOn("publishToMavenCentral", "publishToJFrogArtifactory")
+    description = "Publishes the library to both Maven Central and JFrog Artifactory"
+    group = "publishing"
+    
+    doLast {
+        println("✅ Library published to both Maven Central and JFrog Artifactory!")
+    }
+}
 
 group = "io.github.nadeemiqbal"
 version = "0.0.7"
@@ -181,13 +224,21 @@ kotlin {
     }
 }
 
-
-
 publishing {
     repositories {
         maven {
             name = "staging"
             url = uri(layout.buildDirectory.dir("staging-deploy"))
+        }
+        
+        // JFrog Artifactory configuration
+        maven {
+            name = "JFrogArtifactory"
+            url = uri(System.getenv("JFROG_ARTIFACTORY_URL") ?: "https://your-company.jfrog.io/artifactory/your-repo")
+            credentials {
+                username = System.getenv("JFROG_USERNAME") ?: project.findProperty("jfrog.username") as String?
+                password = System.getenv("JFROG_PASSWORD") ?: project.findProperty("jfrog.password") as String?
+            }
         }
     }
     
