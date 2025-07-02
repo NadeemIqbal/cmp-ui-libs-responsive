@@ -31,6 +31,20 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
       
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          ~/.konan
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+      
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+      
     - name: Update version if manual dispatch
       if: github.event_name == 'workflow_dispatch'
       run: |
@@ -39,8 +53,13 @@ jobs:
         sed -i.bak "s/version = \".*\"/version = \"$VERSION\"/" responsive-ui/build.gradle.kts
         rm responsive-ui/build.gradle.kts.bak
         
+    - name: Build and Test
+      run: ./gradlew :responsive-ui:build --no-daemon --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
     - name: Publish to MavenCentral
-      run: ./gradlew :responsive-ui:publishAllPublicationsToMavenCentralRepository --no-configuration-cache
+      run: ./gradlew :responsive-ui:publishAllPublicationsToMavenCentralRepository --no-daemon --stacktrace
       env:
         ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
@@ -48,6 +67,7 @@ jobs:
         ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
         RELEASE_SIGNING_ENABLED: true
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
         
     - name: Create Release Notes
       if: github.event_name == 'release'
