@@ -3,146 +3,12 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.vanniktech.mavenPublish)
     id("com.eygraber.conventions-detekt")
-    `maven-publish`
-    signing
-}
-
-// Maven Central publishing configuration
-val stagingDir = layout.buildDirectory.dir("staging-deploy")
-
-// GPG signing configuration
-signing {
-    // Check if GPG signing should be skipped
-    val skipSigning = project.hasProperty("gpg.skip") && 
-                     project.property("gpg.skip").toString().toBoolean()
-    
-    if (skipSigning) {
-        println("⏭️ GPG signing skipped (gpg.skip=true)")
-        return@signing
-    }
-    
-    val signingKey = System.getenv("GPG_PRIVATE_KEY_GRADLE") ?: System.getenv("GPG_PRIVATE_KEY")?.replace("\\\\n", "\n")
-    val signingPassword = System.getenv("GPG_PASSPHRASE")
-    val signingKeyId = System.getenv("GPG_KEY_ID")
-    
-    if (signingKey != null && signingPassword != null) {
-        println("✅ Using in-memory GPG signing with key ID: $signingKeyId")
-        if (signingKeyId != null) {
-            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        } else {
-            useInMemoryPgpKeys(signingKey, signingPassword)
-        }
-        sign(publishing.publications)
-    } else {
-        println("⚠️ Using GPG command line for local development")
-        useGpgCmd()
-        sign(publishing.publications)
-    }
-}
-
-// Ensure signing tasks depend on Javadoc tasks
-tasks.withType<Sign>().configureEach {
-    dependsOn(tasks.withType<Jar>().matching { it.name.endsWith("JavadocJar") })
-}
-
-// Task to create bundle for Central Portal
-tasks.register<Zip>("createCentralPortalBundle") {
-    dependsOn("publishAllPublicationsToStagingRepository")
-    
-    from(stagingDir)
-    archiveFileName.set("central-bundle.zip")
-    destinationDirectory.set(layout.buildDirectory.dir("central-publishing"))
-    
-    doLast {
-        println("Bundle created: ${archiveFile.get().asFile.absolutePath}")
-    }
-}
-
-// Upload bundle to Central Portal using curl
-tasks.register<Exec>("uploadToCentralPortal") {
-    dependsOn("createCentralPortalBundle")
-    
-    val bundleFile = layout.buildDirectory.file("central-publishing/central-bundle.zip")
-    
-    doFirst {
-        val username = System.getenv("CENTRAL_PORTAL_USERNAME")
-        val password = System.getenv("CENTRAL_PORTAL_PASSWORD")
-        
-        if (username == null || password == null) {
-            throw GradleException("Central Portal credentials not found")
-        }
-        
-        // Set command line dynamically in doFirst
-        commandLine(
-            "curl", "-X", "POST",
-            "--user", "$username:$password",
-            "--form", "bundle=@${bundleFile.get().asFile.absolutePath}",
-            "--form", "publishingType=AUTOMATIC",
-            "https://central.sonatype.com/api/v1/publisher/upload"
-        )
-    }
-    
-    doLast {
-        println("Upload completed! Check status at: https://central.sonatype.com/publishing/deployments")
-    }
-}
-
-// Main automated publishing task
-tasks.register("publishToMavenCentral") {
-    dependsOn("uploadToCentralPortal")
-    description = "Publishes the library to Maven Central automatically"
-    group = "publishing"
-    
-    doLast {
-        println("✅ Library published to Maven Central!")
-    }
-}
-
-// JFrog Artifactory publishing tasks
-tasks.register("publishToJFrogArtifactory") {
-    dependsOn("publishAllPublicationsToJFrogArtifactoryRepository")
-    description = "Publishes the library to JFrog Artifactory"
-    group = "publishing"
-    
-    doFirst {
-        val jfrogUrl = System.getenv("JFROG_ARTIFACTORY_URL")
-        val jfrogUsername = System.getenv("JFROG_USERNAME") ?: project.findProperty("jfrog.username")
-        val jfrogPassword = System.getenv("JFROG_PASSWORD") ?: project.findProperty("jfrog.password")
-        
-        if (jfrogUrl == null || jfrogUsername == null || jfrogPassword == null) {
-            throw GradleException("""
-                JFrog Artifactory credentials not found. Please set:
-                - JFROG_ARTIFACTORY_URL (e.g., https://your-company.jfrog.io/artifactory/your-repo)
-                - JFROG_USERNAME 
-                - JFROG_PASSWORD
-                
-                Or add to gradle.properties:
-                - jfrog.username=your-username
-                - jfrog.password=your-password
-            """.trimIndent())
-        }
-    }
-    
-    doLast {
-        println("✅ Library published to JFrog Artifactory!")
-        println("Repository URL: ${System.getenv("JFROG_ARTIFACTORY_URL")}")
-    }
-}
-
-// Publish to both repositories
-tasks.register("publishToBoth") {
-    dependsOn("publishToMavenCentral", "publishToJFrogArtifactory")
-    description = "Publishes the library to both Maven Central and JFrog Artifactory"
-    group = "publishing"
-    
-    doLast {
-        println("✅ Library published to both Maven Central and JFrog Artifactory!")
-    }
 }
 
 group = "io.github.nadeemiqbal"
-version = "0.0.7"
+version = "0.0.8"
 
 android {
     namespace = "com.nadeem.responsiveui"
@@ -152,12 +18,6 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -167,29 +27,44 @@ android {
 kotlin {
     androidTarget {
         publishLibraryVariants("release")
+        compilations.all {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                }
+            }
+        }
     }
 
     jvm("desktop") {
         compilations.all {
-            compilerOptions.configure {
-                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                }
             }
         }
     }
     
-    // Enable JavaScript platform
     js(IR) {
         browser()
-        binaries.executable()
-        useCommonJs()
+        nodejs()
     }
 
-    // Enable WebAssembly (optional - can be enabled if needed)
-    // @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-    // wasmJs {
-    //     browser()
-    //     binaries.executable()
-    // }
+    // iOS targets - Commented out for Windows development
+    // Uncomment when building on macOS
+    /*
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ResponsiveUI"
+            isStatic = true
+        }
+    }
+    */
 
     sourceSets {
         commonMain {
@@ -221,66 +96,45 @@ kotlin {
                 implementation(compose.html.core)
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
+        }
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "staging"
-            url = uri(layout.buildDirectory.dir("staging-deploy"))
-        }
+mavenPublishing {
+    coordinates(group.toString(), "responsive-ui", version.toString())
+
+    pom {
+        name.set("Responsive UI")
+        description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
+        inceptionYear.set("2024")
+        url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
         
-        // JFrog Artifactory configuration
-        maven {
-            name = "JFrogArtifactory"
-            url = uri(System.getenv("JFROG_ARTIFACTORY_URL") ?: "https://your-company.jfrog.io/artifactory/your-repo")
-            credentials {
-                username = System.getenv("JFROG_USERNAME") ?: project.findProperty("jfrog.username") as String?
-                password = System.getenv("JFROG_PASSWORD") ?: project.findProperty("jfrog.password") as String?
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
-    }
-    
-    publications.withType<MavenPublication> {
-        // Add unique Javadoc jar for each publication
-        val javadocJar = tasks.register("${name}JavadocJar", Jar::class) {
-            archiveClassifier.set("javadoc")
-            archiveBaseName.set("${project.name}-${name}")
-            // Create empty javadoc jar as placeholder
-            from(layout.buildDirectory.dir("docs/javadoc"))
-            doFirst {
-                // Ensure the javadoc directory exists
-                layout.buildDirectory.dir("docs/javadoc").get().asFile.mkdirs()
+        
+        developers {
+            developer {
+                id.set("NadeemIqbal")
+                name.set("Nadeem Iqbal")
+                email.set("mr_nadeem_iqbal@yahoo.com")
+                url.set("https://github.com/NadeemIqbal")
             }
         }
-        artifact(javadocJar)
         
-        pom {
-            name.set("Responsive UI")
-            description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
+        scm {
             url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
-            
-            licenses {
-                license {
-                    name.set("The Apache License, Version 2.0")
-                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                }
-            }
-            
-            developers {
-                developer {
-                    id.set("NadeemIqbal")
-                    name.set("Nadeem Iqbal")
-                    email.set("mr_nadeem_iqbal@yahoo.com")
-                }
-            }
-            
-            scm {
-                connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
-                developerConnection.set("scm:git:ssh://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
-                url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
-            }
+            connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
+            developerConnection.set("scm:git:ssh://git@github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
         }
     }
 }

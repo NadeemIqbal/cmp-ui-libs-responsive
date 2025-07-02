@@ -34,6 +34,7 @@ ktlint = "1.6.0"
 
 logback = "1.5.18"
 publish = "0.33.0"
+vanniktech-mavenPublish = "0.29.0"
 
 [plugins]
 conventions = { id = "com.eygraber.conventions", version.ref = "conventions" }
@@ -45,6 +46,7 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+vanniktech-mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-mavenPublish" }
 
 [libraries]
 buildscript-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }

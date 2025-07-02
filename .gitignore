@@ -45,6 +45,8 @@ CHANGELOG.md
 *.swp
 *.swo
 
+# Template directory (for reference only)
+multiplatform-library-template-main/
 
 /gradle.properties
 gradle.properties
