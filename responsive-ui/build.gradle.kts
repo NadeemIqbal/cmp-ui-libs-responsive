@@ -13,6 +13,15 @@ val stagingDir = layout.buildDirectory.dir("staging-deploy")
 
 // GPG signing configuration
 signing {
+    // Check if GPG signing should be skipped
+    val skipSigning = project.hasProperty("gpg.skip") && 
+                     project.property("gpg.skip").toString().toBoolean()
+    
+    if (skipSigning) {
+        println("⏭️ GPG signing skipped (gpg.skip=true)")
+        return@signing
+    }
+    
     val signingKey = System.getenv("GPG_PRIVATE_KEY_GRADLE") ?: System.getenv("GPG_PRIVATE_KEY")?.replace("\\\\n", "\n")
     val signingPassword = System.getenv("GPG_PASSPHRASE")
     val signingKeyId = System.getenv("GPG_KEY_ID")
@@ -24,11 +33,12 @@ signing {
         } else {
             useInMemoryPgpKeys(signingKey, signingPassword)
         }
+        sign(publishing.publications)
     } else {
         println("⚠️ Using GPG command line for local development")
         useGpgCmd()
+        sign(publishing.publications)
     }
-    sign(publishing.publications)
 }
 
 // Ensure signing tasks depend on Javadoc tasks
@@ -89,7 +99,7 @@ tasks.register("publishToMavenCentral") {
 
 
 group = "io.github.nadeemiqbal"
-version = "0.0.6"
+version = "0.0.7"
 
 android {
     namespace = "com.nadeem.responsiveui"
