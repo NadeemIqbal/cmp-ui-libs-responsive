@@ -106,6 +106,15 @@ kotlin {
 }
 
 mavenPublishing {
+    publishToMavenCentral()
+
+    // Only sign when signing keys are available (in CI/CD)
+    if (project.hasProperty("signingInMemoryKeyId") || 
+        System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyId") != null ||
+        project.findProperty("RELEASE_SIGNING_ENABLED") == "true") {
+        signAllPublications()
+    }
+
     coordinates(group.toString(), "responsive-ui", version.toString())
 
     pom {
