@@ -94,20 +94,13 @@ To run tests:
 
 This library supports publishing to multiple repositories:
 
-- **Maven Central**: See [PUBLISHING.md](PUBLISHING.md)
 - **JFrog Artifactory**: See [JFROG_PUBLISHING.md](JFROG_PUBLISHING.md)
 - **JitPack**: Automatic via GitHub tags
 
 ### Quick Publishing Commands
 ```bash
-# Publish to Maven Central
-./gradlew publishToMavenCentral
-
 # Publish to JFrog Artifactory
 ./gradlew publishToJFrogArtifactory
-
-# Publish to both repositories
-./gradlew publishToBoth
 ```
 
 ## License

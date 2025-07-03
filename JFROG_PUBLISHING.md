@@ -1,6 +1,6 @@
 # JFrog Artifactory Publishing Guide
 
-This guide explains how to publish your Kotlin Multiplatform library to JFrog Artifactory alongside the existing Maven Central publishing.
+This guide explains how to publish your Kotlin Multiplatform library to JFrog Artifactory.
 
 ## 🚀 **Quick Start**
 
@@ -25,11 +25,8 @@ Replace `https://your-company.jfrog.io/artifactory/your-repo` in the configurati
 
 ### 3. Publish to JFrog Artifactory
 ```bash
-# Publish only to JFrog Artifactory
+# Publish to JFrog Artifactory
 ./gradlew publishToJFrogArtifactory
-
-# Publish to both Maven Central and JFrog Artifactory
-./gradlew publishToBoth
 ```
 
 ## 🔧 **Configuration Options**
@@ -56,7 +53,7 @@ Replace `https://your-company.jfrog.io/artifactory/your-repo` in the configurati
 
 ## 📋 **What Gets Published**
 
-The same artifacts published to Maven Central will be published to JFrog Artifactory:
+The following artifacts will be published to JFrog Artifactory:
 
 - ✅ **Android AAR** + sources + javadoc
 - ✅ **Desktop JAR** + sources + javadoc  
@@ -152,9 +149,7 @@ After publishing, verify the artifacts in your JFrog Artifactory:
 
 | Task | Description |
 |------|-------------|
-| `publishToJFrogArtifactory` | Publish only to JFrog Artifactory |
-| `publishToMavenCentral` | Publish only to Maven Central |
-| `publishToBoth` | Publish to both repositories |
+| `publishToJFrogArtifactory` | Publish to JFrog Artifactory |
 | `publishAllPublicationsToJFrogArtifactoryRepository` | Low-level JFrog publishing task |
 
 ## 🛠️ **Troubleshooting**

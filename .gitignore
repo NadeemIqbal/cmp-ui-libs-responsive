@@ -48,5 +48,6 @@ CHANGELOG.md
 # Template directory (for reference only)
 multiplatform-library-template-main/
 
-/gradle.properties
+# Gradle properties (contains sensitive publishing info)
 gradle.properties
+/gradle.properties
