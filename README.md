@@ -17,38 +17,6 @@ dependencies {
 }
 ```
 
-### Via JFrog Artifactory
-```kotlin
-repositories {
-    maven {
-        url = uri("https://your-company.jfrog.io/artifactory/your-repo")
-        credentials {
-            username = "your-username"
-            password = "your-password"
-        }
-    }
-}
-
-dependencies {
-    implementation("io.github.nadeemiqbal:responsive-ui:0.0.7")
-}
-```
-
-### Via JitPack
-
-Add JitPack repository to your project:
-
-**In your root `build.gradle.kts`:**
-```kotlin
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io") // Add this line
-    }
-}
-```
-
 **In your module `build.gradle.kts`:**
 ```kotlin
 dependencies {
@@ -92,16 +60,7 @@ To run tests:
 
 ## Publishing
 
-This library supports publishing to multiple repositories:
-
-- **JFrog Artifactory**: See [JFROG_PUBLISHING.md](JFROG_PUBLISHING.md)
-- **JitPack**: Automatic via GitHub tags
-
-### Quick Publishing Commands
-```bash
-# Publish to JFrog Artifactory
-./gradlew publishToJFrogArtifactory
-```
+Coming soon
 
 ## License
 
