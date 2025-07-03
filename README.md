@@ -4,7 +4,7 @@ A Kotlin Multiplatform Compose library that provides Flutter-like responsive lay
 
 ## Demo
 
-![Responsive UI Demo](example.gif)
+![Responsive UI Demo](https://raw.githubusercontent.com/NadeemIqbal/cmp-ui-libs-responsive/master/example.gif)
 
 *The library automatically adapts layouts based on screen size - mobile, tablet, and desktop views*
 
