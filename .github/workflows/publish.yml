@@ -41,7 +41,7 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-      
+          
     - name: Make gradlew executable
       run: chmod +x ./gradlew
       
@@ -58,6 +58,16 @@ jobs:
       env:
         GRADLE_OPTS: -Dorg.gradle.daemon=false
         
+    - name: Debug Signing Configuration
+      run: ./gradlew :responsive-ui:debugSigning --no-daemon
+      env:
+        ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
     - name: Publish to MavenCentral
       run: ./gradlew :responsive-ui:publishAllPublicationsToMavenCentralRepository --no-daemon --stacktrace
       env:
@@ -66,7 +76,6 @@ jobs:
         ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
         ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
-        RELEASE_SIGNING_ENABLED: true
         GRADLE_OPTS: -Dorg.gradle.daemon=false
         
     - name: Create Release Notes
@@ -75,4 +84,4 @@ jobs:
       with:
         generate_release_notes: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
