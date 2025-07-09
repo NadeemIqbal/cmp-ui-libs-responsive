@@ -213,7 +213,7 @@ plugins {
 @file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
 
 group = "io.github.nadeemiqbal"
-version = "0.0.8"
+version = "0.0.9"
 
 android {
     namespace = "com.nadeem.responsiveui"
