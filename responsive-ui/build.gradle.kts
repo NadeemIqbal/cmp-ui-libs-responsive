@@ -390,7 +390,7 @@ tasks.register("debugSigning") {
         println("\nPublications:")
         publishing.publications.forEach { pub ->
             println("Publication: ${pub.name}")
-            if (pub is MavenPublication) {
+            if(pub is MavenPublication) {
                 println("  Group: ${pub.groupId}")
                 println("  Artifact: ${pub.artifactId}")
                 println("  Version: ${pub.version}")
