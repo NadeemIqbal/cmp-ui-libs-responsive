@@ -303,18 +303,21 @@ kotlin {
             }
         }
 
+        @Suppress("UnusedPrivateProperty")
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
             }
         }
 
+        @Suppress("UnusedPrivateProperty")
         val jsMain by getting {
             dependencies {
                 implementation(compose.html.core)
             }
         }
 
+        @Suppress("UnusedPrivateProperty")
         val wasmJsMain by getting {
             dependencies {
                 // Note: compose.html.core doesn't support wasmJs yet
