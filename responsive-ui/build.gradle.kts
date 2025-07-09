@@ -45,7 +45,7 @@
 //             }
 //         }
 //     }
-    
+
 //     js(IR) {
 //         browser()
 //         nodejs()
@@ -75,7 +75,7 @@
 //                 implementation(compose.material3)
 //             }
 //         }
-        
+
 //         androidMain {
 //             dependencies {
 //                 implementation(compose.ui)
@@ -84,13 +84,13 @@
 //                 implementation(compose.foundation)
 //             }
 //         }
-        
+
 //         val desktopMain by getting {
 //             dependencies {
 //                 implementation(compose.desktop.currentOs)
 //             }
 //         }
-        
+
 //         val jsMain by getting {
 //             dependencies {
 //                 implementation(compose.html.core)
@@ -109,7 +109,7 @@
 // //     publishToMavenCentral()
 
 // //     // Only sign when signing keys are available (in CI/CD)
-// //     if (project.hasProperty("signingInMemoryKeyId") || 
+// //     if (project.hasProperty("signingInMemoryKeyId") ||
 // //         System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyId") != null ||
 // //         project.findProperty("RELEASE_SIGNING_ENABLED") == "true") {
 // //         signAllPublications()
@@ -122,7 +122,7 @@
 // //         description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
 // //         inceptionYear.set("2024")
 // //         url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
-        
+
 // //         licenses {
 // //             license {
 // //                 name.set("The Apache License, Version 2.0")
@@ -130,7 +130,7 @@
 // //                 distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
 // //             }
 // //         }
-        
+
 // //         developers {
 // //             developer {
 // //                 id.set("NadeemIqbal")
@@ -139,7 +139,7 @@
 // //                 url.set("https://github.com/NadeemIqbal")
 // //             }
 // //         }
-        
+
 // //         scm {
 // //             url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
 // //             connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
@@ -155,10 +155,10 @@
 
 //     // ALWAYS sign when publishing to Maven Central (the plugin handles the conditional logic)
 //     signAllPublications()
-    
+
 //     // Alternative: Only sign when keys are available
-//     // if (project.hasProperty("signingInMemoryKeyId") || 
-//     //     project.hasProperty("signingInMemoryKey") || 
+//     // if (project.hasProperty("signingInMemoryKeyId") ||
+//     //     project.hasProperty("signingInMemoryKey") ||
 //     //     System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyId") != null ||
 //     //     System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null) {
 //     //     signAllPublications()
@@ -171,7 +171,7 @@
 //         description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
 //         inceptionYear.set("2024")
 //         url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
-        
+
 //         licenses {
 //             license {
 //                 name.set("The Apache License, Version 2.0")
@@ -179,7 +179,7 @@
 //                 distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
 //             }
 //         }
-        
+
 //         developers {
 //             developer {
 //                 id.set("NadeemIqbal")
@@ -188,7 +188,7 @@
 //                 url.set("https://github.com/NadeemIqbal")
 //             }
 //         }
-        
+
 //         scm {
 //             url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
 //             connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
@@ -250,12 +250,12 @@ kotlin {
             }
         }
     }
-    
+
     js(IR) {
         browser()
         nodejs()
     }
-    
+
     wasmJs {
         browser()
         nodejs()
@@ -293,7 +293,7 @@ kotlin {
                 implementation(compose.material3)
             }
         }
-        
+
         androidMain {
             dependencies {
                 implementation(compose.ui)
@@ -302,19 +302,19 @@ kotlin {
                 implementation(compose.foundation)
             }
         }
-        
+
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
             }
         }
-        
+
         val jsMain by getting {
             dependencies {
                 implementation(compose.html.core)
             }
         }
-        
+
         val wasmJsMain by getting {
             dependencies {
                 // Note: compose.html.core doesn't support wasmJs yet
@@ -333,7 +333,7 @@ kotlin {
 }
 
 mavenPublishing {
-    // Configure for Maven Central - the plugin will automatically sign when credentials are available
+    // Configure for Maven Central
     publishToMavenCentral(automaticRelease = false)
 
     coordinates(group.toString(), "responsive-ui", version.toString())
@@ -343,7 +343,7 @@ mavenPublishing {
         description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
         inceptionYear.set("2024")
         url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
-        
+
         licenses {
             license {
                 name.set("The Apache License, Version 2.0")
@@ -351,7 +351,7 @@ mavenPublishing {
                 distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
-        
+
         developers {
             developer {
                 id.set("NadeemIqbal")
@@ -360,7 +360,7 @@ mavenPublishing {
                 url.set("https://github.com/NadeemIqbal")
             }
         }
-        
+
         scm {
             url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
             connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
@@ -378,12 +378,12 @@ tasks.register("debugSigning") {
         println("Has signingInMemoryKeyId property: ${project.hasProperty("signingInMemoryKeyId")}")
         println("Has signingInMemoryKey property: ${project.hasProperty("signingInMemoryKey")}")
         println("Has signingInMemoryKeyPassword property: ${project.hasProperty("signingInMemoryKeyPassword")}")
-        
+
         println("\nEnvironment variables:")
         println("ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyId") != null}")
         println("ORG_GRADLE_PROJECT_signingInMemoryKey: ${System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null}")
         println("ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyPassword") != null}")
-        
+
         println("\nPublications:")
         publishing.publications.forEach { pub ->
             println("Publication: ${pub.name}")
