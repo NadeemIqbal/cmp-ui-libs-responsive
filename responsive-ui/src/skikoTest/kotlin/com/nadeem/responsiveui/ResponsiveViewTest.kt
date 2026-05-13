@@ -1,6 +1,7 @@
 package com.nadeem.responsiveui
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.onAllNodesWithText
@@ -11,13 +12,8 @@ import kotlin.test.Test
 @OptIn(ExperimentalTestApi::class)
 class ResponsiveViewTest {
 
-    private val forceDesktop = ScreenBreakpoints(mobile = 0, tablet = 0, desktop = 0, watch = 0)
-    private val forceMobile = ScreenBreakpoints(
-        mobile = Int.MAX_VALUE,
-        tablet = Int.MAX_VALUE,
-        desktop = Int.MAX_VALUE,
-        watch = 0,
-    )
+    private val forceDesktop = ScreenBreakpoints(watch = 0, mobile = 0, tablet = 0)
+    private val forceMobile = ScreenBreakpoints(watch = 0, mobile = Int.MAX_VALUE, tablet = Int.MAX_VALUE)
 
     @Test
     fun rendersSlotWhenProvided() = runComposeUiTest {
@@ -33,7 +29,7 @@ class ResponsiveViewTest {
     @Test
     fun rendersFallbackWhenSlotNull() = runComposeUiTest {
         setContent {
-            // Force Desktop bucket, leave desktop slot null.
+            // Force Desktop bucket, leave desktop slot null — built-in fallback renders.
             ResponsiveView(breakpoints = forceDesktop)
         }
         onNodeWithText("No view available for Desktop screen size").assertExists()
@@ -41,13 +37,25 @@ class ResponsiveViewTest {
     }
 
     @Test
-    fun builderObjectDelegatesToScreenTypeLayout() = runComposeUiTest {
+    fun customFallbackInstalledViaCompositionLocalReplacesDefault() = runComposeUiTest {
         setContent {
-            ScreenTypeLayoutBuilder.builder(
-                breakpoints = forceMobile,
-                mobile = { Text("via-builder") },
-            )
+            CompositionLocalProvider(
+                LocalResponsiveFallback provides { type -> Text("custom-${type::class.simpleName}") },
+            ) {
+                ResponsiveView(breakpoints = forceMobile)
+            }
         }
-        onNodeWithText("via-builder").assertExists()
+        onNodeWithText("custom-Mobile").assertExists()
+        onAllNodesWithText("No view available for").assertCountEquals(0)
+    }
+
+    @Test
+    fun breakpointsFromLocalAreUsedWhenNotPassedExplicitly() = runComposeUiTest {
+        setContent {
+            CompositionLocalProvider(LocalScreenBreakpoints provides forceMobile) {
+                ResponsiveView(mobile = { Text("from-local") })
+            }
+        }
+        onNodeWithText("from-local").assertExists()
     }
 }

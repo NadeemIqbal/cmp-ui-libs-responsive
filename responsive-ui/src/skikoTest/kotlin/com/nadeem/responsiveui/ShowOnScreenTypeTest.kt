@@ -1,6 +1,6 @@
 package com.nadeem.responsiveui
 
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.onAllNodesWithText
@@ -11,13 +11,8 @@ import kotlin.test.Test
 @OptIn(ExperimentalTestApi::class)
 class ShowOnScreenTypeTest {
 
-    private val forceDesktop = ScreenBreakpoints(mobile = 0, tablet = 0, desktop = 0, watch = 0)
-    private val forceMobile = ScreenBreakpoints(
-        mobile = Int.MAX_VALUE,
-        tablet = Int.MAX_VALUE,
-        desktop = Int.MAX_VALUE,
-        watch = 0,
-    )
+    private val forceDesktop = ScreenBreakpoints(watch = 0, mobile = 0, tablet = 0)
+    private val forceMobile = ScreenBreakpoints(watch = 0, mobile = Int.MAX_VALUE, tablet = Int.MAX_VALUE)
 
     @Test
     fun showsContentWhenCurrentTypeMatches() = runComposeUiTest {

@@ -9,19 +9,17 @@ class ScreenBreakpointsTest {
     @Test
     fun defaultsMatchDocumentation() {
         val b = ScreenBreakpoints()
+        assertEquals(300, b.watch)
         assertEquals(600, b.mobile)
         assertEquals(900, b.tablet)
-        assertEquals(1200, b.desktop)
-        assertEquals(300, b.watch)
     }
 
     @Test
     fun customValuesArePreserved() {
-        val b = ScreenBreakpoints(mobile = 500, tablet = 800, desktop = 1100, watch = 200)
+        val b = ScreenBreakpoints(watch = 200, mobile = 500, tablet = 800)
+        assertEquals(200, b.watch)
         assertEquals(500, b.mobile)
         assertEquals(800, b.tablet)
-        assertEquals(1100, b.desktop)
-        assertEquals(200, b.watch)
     }
 
     @Test
@@ -37,11 +35,12 @@ class ScreenBreakpointsTest {
         assertEquals(a.tablet, c.tablet)
     }
 
-    // Boundary tests for getScreenType. Locks in current behavior including
-    // the known quirk that widths in [tablet, desktop) also return Tablet
-    // (line 36 of ResponsiveUi.kt — width < desktop -> ScreenType.Tablet).
-    // If the library intends Desktop for that range, fix the implementation
-    // and update these tests.
+    // Boundary tests for getScreenType. After the 1.0 fix:
+    //   width < watch  → Watch
+    //   width < mobile → Mobile
+    //   width < tablet → Tablet
+    //   else           → Desktop
+    // (the buggy 0.0.x branch that returned Tablet for [tablet, ∞) is gone.)
 
     @Test
     fun belowWatchBreakpointReturnsWatch() {
@@ -51,37 +50,32 @@ class ScreenBreakpointsTest {
     }
 
     @Test
-    fun watchBreakpointReturnsMobile() {
+    fun watchBoundaryReturnsMobile() {
         val b = ScreenBreakpoints()
         assertEquals(ScreenType.Mobile, b.getScreenType(300))
         assertEquals(ScreenType.Mobile, b.getScreenType(599))
     }
 
     @Test
-    fun mobileBreakpointReturnsTablet() {
+    fun mobileBoundaryReturnsTablet() {
         val b = ScreenBreakpoints()
         assertEquals(ScreenType.Tablet, b.getScreenType(600))
         assertEquals(ScreenType.Tablet, b.getScreenType(899))
     }
 
     @Test
-    fun tabletBreakpointAlsoReturnsTablet_currentBehavior() {
-        // 900..1199 returns Tablet, not Desktop, per ResponsiveUi.kt:36.
+    fun tabletBoundaryReturnsDesktop() {
+        // Behavior change in 1.0: widths >= tablet now correctly resolve to Desktop
+        // (was returning Tablet erroneously in 0.0.x).
         val b = ScreenBreakpoints()
-        assertEquals(ScreenType.Tablet, b.getScreenType(900))
-        assertEquals(ScreenType.Tablet, b.getScreenType(1199))
-    }
-
-    @Test
-    fun desktopBreakpointReturnsDesktop() {
-        val b = ScreenBreakpoints()
-        assertEquals(ScreenType.Desktop, b.getScreenType(1200))
+        assertEquals(ScreenType.Desktop, b.getScreenType(900))
+        assertEquals(ScreenType.Desktop, b.getScreenType(1199))
         assertEquals(ScreenType.Desktop, b.getScreenType(10_000))
     }
 
     @Test
     fun customBreakpointsAreRespected() {
-        val b = ScreenBreakpoints(mobile = 500, tablet = 800, desktop = 1100, watch = 250)
+        val b = ScreenBreakpoints(watch = 250, mobile = 500, tablet = 1100)
         assertEquals(ScreenType.Watch, b.getScreenType(249))
         assertEquals(ScreenType.Mobile, b.getScreenType(250))
         assertEquals(ScreenType.Mobile, b.getScreenType(499))

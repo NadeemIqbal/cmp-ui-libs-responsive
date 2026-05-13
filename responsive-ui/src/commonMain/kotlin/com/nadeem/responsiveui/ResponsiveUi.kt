@@ -1,196 +1,196 @@
 package com.nadeem.responsiveui
 
-import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 
 /**
- * Represents different screen types based on screen width
+ * Screen-size buckets used to drive responsive layout decisions.
+ *
+ * The boundaries between buckets are controlled by [ScreenBreakpoints]; the
+ * defaults align with common device sizes and broadly with Material 3's
+ * [androidx.compose.material3.windowsizeclass.WindowWidthSizeClass].
  */
 public sealed class ScreenType {
-    public object Mobile : ScreenType()
-    public object Tablet : ScreenType()
-    public object Desktop : ScreenType()
-    public object Watch : ScreenType()
+    public data object Watch : ScreenType()
+    public data object Mobile : ScreenType()
+    public data object Tablet : ScreenType()
+    public data object Desktop : ScreenType()
 }
 
 /**
- * Configuration for screen breakpoints in dp
+ * Configuration for screen breakpoints in dp.
+ *
+ * Each value is the **exclusive upper bound** of that screen type, so:
+ * - `width < watch`              → [ScreenType.Watch]
+ * - `watch <= width < mobile`    → [ScreenType.Mobile]
+ * - `mobile <= width < tablet`   → [ScreenType.Tablet]
+ * - `tablet <= width`            → [ScreenType.Desktop]
+ *
+ * Defaults match the Material 3 window-size-class boundaries closely
+ * (600 dp = Compact/Medium boundary, 900 dp ≈ Medium/Expanded boundary).
  */
 public data class ScreenBreakpoints(
+    val watch: Int = 300,
     val mobile: Int = 600,
     val tablet: Int = 900,
-    val desktop: Int = 1200,
-    val watch: Int = 300
 ) {
     /**
-     * Determines the screen type based on the given width
+     * Resolves a screen width (in dp) to a [ScreenType].
      */
-    public fun getScreenType(width: Int): ScreenType {
-        return when {
-            width < watch -> ScreenType.Watch
-            width < mobile -> ScreenType.Mobile
-            width < tablet -> ScreenType.Tablet
-            width < desktop -> ScreenType.Tablet
-            else -> ScreenType.Desktop
-        }
+    public fun getScreenType(width: Int): ScreenType = when {
+        width < watch -> ScreenType.Watch
+        width < mobile -> ScreenType.Mobile
+        width < tablet -> ScreenType.Tablet
+        else -> ScreenType.Desktop
     }
 }
 
 /**
- * Device configuration utility for responsive layouts
+ * Internal override used by `:responsive-ui-testing`'s
+ * `runResponsiveUiTestAtWidth(...)` to inject a deterministic screen width
+ * into UI tests where `LocalWindowInfo.containerSize.width` would otherwise
+ * report 0 in headless test compositions.
+ *
+ * Consumers should never need this — use [rememberScreenWidth] directly.
  */
-public object DeviceConfig {
-    private var _screenWidth by mutableStateOf(0)
-    public val screenWidth: Int get() = _screenWidth
-    
-    private var _screenHeight by mutableStateOf(0)
-    public val screenHeight: Int get() = _screenHeight
-    
-    /**
-     * Updates the screen dimensions
-     */
-    public fun updateScreenDimensions(width: Int, height: Int) {
-        _screenWidth = width
-        _screenHeight = height
-    }
-}
+internal val LocalScreenWidthOverride = staticCompositionLocalOf<Int?> { null }
 
 /**
- * Composable builder for responsive layouts
+ * App-wide default [ScreenBreakpoints]. Install once at the app root:
+ *
+ * ```
+ * CompositionLocalProvider(LocalScreenBreakpoints provides ScreenBreakpoints(...)) {
+ *     App()
+ * }
+ * ```
+ *
+ * Every responsive composable in this library reads from this local by
+ * default, so individual call sites no longer need to pass `breakpoints =`.
+ */
+public val LocalScreenBreakpoints: androidx.compose.runtime.ProvidableCompositionLocal<ScreenBreakpoints> =
+    staticCompositionLocalOf { ScreenBreakpoints() }
+
+/**
+ * App-wide fallback content shown by [ScreenTypeLayout] and [ResponsiveView]
+ * when the slot for the current screen type is null. Install at the app root
+ * to brand the placeholder; defaults to a plain centred message.
+ */
+public val LocalResponsiveFallback: androidx.compose.runtime.ProvidableCompositionLocal<@Composable (ScreenType) -> Unit> =
+    staticCompositionLocalOf { { type -> DefaultFallbackWidget(type) } }
+
+/**
+ * Current window width in dp, reactive to window resizes on every target.
  */
 @Composable
-public fun ScreenTypeLayout(
-    breakpoints: ScreenBreakpoints = ScreenBreakpoints(),
-    mobile: @Composable () -> Unit = { DefaultFallbackWidget("Mobile") },
-    tablet: @Composable () -> Unit = { DefaultFallbackWidget("Tablet") },
-    desktop: @Composable () -> Unit = { DefaultFallbackWidget("Desktop") },
-    watch: @Composable () -> Unit = { DefaultFallbackWidget("Watch") },
-    modifier: Modifier = Modifier
-) {
-    val screenWidth = getScreenWidth()
-    val screenHeight = getScreenHeight()
-    val screenType = breakpoints.getScreenType(screenWidth)
-    
-    // Update device config
-    LaunchedEffect(screenWidth, screenHeight) {
-        DeviceConfig.updateScreenDimensions(screenWidth, screenHeight)
-    }
-    
-    Box(modifier = modifier) {
-        when (screenType) {
-            is ScreenType.Watch -> watch()
-            is ScreenType.Mobile -> mobile()
-            is ScreenType.Tablet -> tablet()
-            is ScreenType.Desktop -> desktop()
-        }
-    }
+public fun rememberScreenWidth(): Int {
+    LocalScreenWidthOverride.current?.let { return it }
+    val containerWidthPx = LocalWindowInfo.current.containerSize.width
+    val density = LocalDensity.current
+    return with(density) { containerWidthPx.toDp().value.toInt() }
 }
 
 /**
- * Builder-style responsive layout similar to Flutter's responsive_builder
+ * Current window height in dp, reactive to window resizes on every target.
  */
-public object ScreenTypeLayoutBuilder {
-    @Composable
-    public fun builder(
-        breakpoints: ScreenBreakpoints = ScreenBreakpoints(),
-        mobile: (@Composable () -> Unit)? = null,
-        tablet: (@Composable () -> Unit)? = null,
-        desktop: (@Composable () -> Unit)? = null,
-        watch: (@Composable () -> Unit)? = null,
-        modifier: Modifier = Modifier
-    ) {
-        ScreenTypeLayout(
-            breakpoints = breakpoints,
-            mobile = mobile ?: { DefaultFallbackWidget("Mobile") },
-            tablet = tablet ?: { DefaultFallbackWidget("Tablet") },
-            desktop = desktop ?: { DefaultFallbackWidget("Desktop") },
-            watch = watch ?: { DefaultFallbackWidget("Watch") },
-            modifier = modifier
-        )
-    }
+@Composable
+public fun rememberScreenHeight(): Int {
+    val containerHeightPx = LocalWindowInfo.current.containerSize.height
+    val density = LocalDensity.current
+    return with(density) { containerHeightPx.toDp().value.toInt() }
 }
 
 /**
- * Responsive view composable that mimics Flutter's ResponsiveView
+ * Current [ScreenType], computed from [rememberScreenWidth] against the
+ * provided [breakpoints] (defaulting to [LocalScreenBreakpoints]).
+ */
+@Composable
+public fun rememberScreenType(
+    breakpoints: ScreenBreakpoints = LocalScreenBreakpoints.current,
+): ScreenType = breakpoints.getScreenType(rememberScreenWidth())
+
+/**
+ * Slot-based layout that renders one of [watch] / [mobile] / [tablet] /
+ * [desktop] depending on the current screen size. Slots that are `null` fall
+ * back to [LocalResponsiveFallback] (the library default just shows a text
+ * placeholder).
  */
 @Composable
 public fun ResponsiveView(
+    watch: (@Composable () -> Unit)? = null,
     mobile: (@Composable () -> Unit)? = null,
     tablet: (@Composable () -> Unit)? = null,
     desktop: (@Composable () -> Unit)? = null,
-    watch: (@Composable () -> Unit)? = null,
-    breakpoints: ScreenBreakpoints = ScreenBreakpoints(),
-    modifier: Modifier = Modifier
+    breakpoints: ScreenBreakpoints = LocalScreenBreakpoints.current,
+    modifier: Modifier = Modifier,
 ) {
-    ScreenTypeLayoutBuilder.builder(
-        breakpoints = breakpoints,
-        mobile = mobile,
-        tablet = tablet,
-        desktop = desktop,
-        watch = watch,
-        modifier = modifier
-    )
-}
-
-/**
- * Default fallback widget when no specific layout is provided
- */
-@Composable
-private fun DefaultFallbackWidget(screenType: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "No view available for $screenType screen size",
-            color = androidx.compose.ui.graphics.Color.Black
-        )
+    val type = rememberScreenType(breakpoints)
+    val fallback = LocalResponsiveFallback.current
+    Box(modifier = modifier) {
+        when (type) {
+            ScreenType.Watch -> watch?.invoke() ?: fallback(type)
+            ScreenType.Mobile -> mobile?.invoke() ?: fallback(type)
+            ScreenType.Tablet -> tablet?.invoke() ?: fallback(type)
+            ScreenType.Desktop -> desktop?.invoke() ?: fallback(type)
+        }
     }
 }
 
 /**
- * Utility composable to get current screen type
+ * Slot-based layout where every slot is mandatory. Use when you want the
+ * compiler to enforce that you've covered all four screen types; otherwise
+ * use [ResponsiveView] which makes slots optional.
  */
 @Composable
-public fun getScreenType(breakpoints: ScreenBreakpoints = ScreenBreakpoints()): ScreenType {
-    val screenWidth = getScreenWidth()
-    return breakpoints.getScreenType(screenWidth)
+public fun ScreenTypeLayout(
+    watch: @Composable () -> Unit,
+    mobile: @Composable () -> Unit,
+    tablet: @Composable () -> Unit,
+    desktop: @Composable () -> Unit,
+    breakpoints: ScreenBreakpoints = LocalScreenBreakpoints.current,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        when (rememberScreenType(breakpoints)) {
+            ScreenType.Watch -> watch()
+            ScreenType.Mobile -> mobile()
+            ScreenType.Tablet -> tablet()
+            ScreenType.Desktop -> desktop()
+        }
+    }
 }
 
 /**
- * Conditional composable rendering based on screen type
+ * Conditional rendering — [content] is composed only if the current
+ * [ScreenType] is in [screenTypes].
  */
 @Composable
 public fun ShowOnScreenType(
     screenTypes: List<ScreenType>,
-    breakpoints: ScreenBreakpoints = ScreenBreakpoints(),
-    content: @Composable () -> Unit
+    breakpoints: ScreenBreakpoints = LocalScreenBreakpoints.current,
+    content: @Composable () -> Unit,
 ) {
-    val currentScreenType = getScreenType(breakpoints)
-    if (currentScreenType in screenTypes) {
+    if (rememberScreenType(breakpoints) in screenTypes) {
         content()
     }
 }
 
-// Platform-specific functions to be implemented in each platform
 @Composable
-public expect fun getScreenWidth(): Int
-@Composable
-public expect fun getScreenHeight(): Int
-
-// Legacy support - keeping the old DeviceType for backward compatibility
-@Deprecated("Use ScreenType instead", ReplaceWith("ScreenType"))
-@Suppress("DEPRECATION")
-public sealed class DeviceType {
-    public object Mobile : DeviceType()
-    public object Tablet : DeviceType()
-    public object Desktop : DeviceType()
-    public object Unknown : DeviceType()
+private fun DefaultFallbackWidget(type: ScreenType) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "No view available for ${type::class.simpleName} screen size",
+            color = LocalContentColor.current,
+        )
+    }
 }
-
-@Deprecated("Use getScreenType() instead")
-@Suppress("DEPRECATION")
-public expect fun getDeviceType(): DeviceType 
