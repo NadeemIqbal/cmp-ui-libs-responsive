@@ -2,7 +2,6 @@
 
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -10,14 +9,13 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.vanniktech.mavenPublish)
-    id("com.eygraber.conventions-detekt")
 }
 
 group = "io.github.nadeemiqbal"
 version = "1.0.0"
 
 android {
-    namespace = "com.nadeem.responsiveui"
+    namespace = "com.nadeem.responsiveui.testing"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -31,9 +29,6 @@ android {
 }
 
 kotlin {
-    // Explicit hierarchy template — required because our manual `dependsOn`
-    // for skikoTest below would otherwise disable the auto-applied default
-    // (commonMain → appleMain → iosMain → iosArm64Main / iosSimulatorArm64Main).
     applyDefaultHierarchyTemplate()
 
     androidTarget {
@@ -62,79 +57,44 @@ kotlin {
         nodejs()
     }
 
-    // XCFramework assembly task: `./gradlew :responsive-ui:assembleResponsiveUIXCFramework`
-    // produces a single .xcframework for Swift/ObjC consumers (SwiftPM / CocoaPods).
-    val xcf = XCFramework("ResponsiveUI")
     listOf(
         iosArm64(),
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ResponsiveUI"
+            baseName = "ResponsiveUITesting"
             isStatic = true
-            xcf.add(this)
         }
     }
 
     sourceSets {
         commonMain.dependencies {
+            api(project(":responsive-ui"))
             implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
+            @OptIn(ExperimentalComposeLibrary::class)
+            api(compose.uiTest)
         }
-
-        androidMain.dependencies {
-            implementation(compose.ui)
-        }
-
-        val desktopMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-            }
-        }
-
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(libs.kotlinx.coroutines.test)
+            implementation(compose.material3)
         }
-
-        // UI tests use compose.uiTest (Skiko-backed) which doesn't run on
-        // Android plain JVM unit tests. Put UI tests in `skikoTest` so they
-        // only run on Desktop / iOS / Wasm. Android unit tests stay focused
-        // on pure-logic checks via `commonTest`. Android consumers still get
-        // the same artifacts.
-        val skikoTest by creating {
-            dependsOn(commonTest.get())
-            dependencies {
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.uiTest)
-            }
-        }
+        val skikoTest by creating { dependsOn(commonTest.get()) }
         listOf("desktopTest", "iosArm64Test", "iosSimulatorArm64Test", "wasmJsTest").forEach { name ->
             named(name) { dependsOn(skikoTest) }
         }
     }
 }
 
-compose.resources {
-    // Pin the generated Res class package so imports in commonMain are
-    // predictable regardless of artifact-id-to-package mangling rules.
-    packageOfResClass = "com.nadeem.responsiveui.resources"
-    publicResClass = false
-}
-
 mavenPublishing {
-    publishToMavenCentral(automaticRelease = false)
     signAllPublications()
+    publishToMavenCentral(automaticRelease = false)
 
-    coordinates(group.toString(), "responsive-ui", version.toString())
+    coordinates(group.toString(), "responsive-ui-testing", version.toString())
 
     pom {
-        name.set("Responsive UI")
-        description.set("A Kotlin Multiplatform Compose library that provides Flutter-like responsive layouts")
-        inceptionYear.set("2024")
+        name.set("Responsive UI — Testing")
+        description.set("Test helpers for io.github.nadeemiqbal:responsive-ui — inject a deterministic screen width into Compose UI tests.")
+        inceptionYear.set("2026")
         url.set("https://github.com/NadeemIqbal/cmp-ui-libs-responsive")
 
         licenses {

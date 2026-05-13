@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="responsive_ui_no_view_for_screen">No hay vista disponible para el tamaño de pantalla %1$s</string>
+</resources>

@@ -10,6 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import com.nadeem.responsiveui.resources.Res
+import com.nadeem.responsiveui.resources.responsive_ui_no_view_for_screen
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Screen-size buckets used to drive responsive layout decisions.
@@ -54,14 +57,28 @@ public data class ScreenBreakpoints(
 }
 
 /**
- * Internal override used by `:responsive-ui-testing`'s
- * `runResponsiveUiTestAtWidth(...)` to inject a deterministic screen width
- * into UI tests where `LocalWindowInfo.containerSize.width` would otherwise
- * report 0 in headless test compositions.
- *
- * Consumers should never need this — use [rememberScreenWidth] directly.
+ * Marks an API that's part of the contract between `:responsive-ui` and
+ * `:responsive-ui-testing`. Production consumer code should never need to
+ * opt in.
  */
-internal val LocalScreenWidthOverride = staticCompositionLocalOf<Int?> { null }
+@RequiresOptIn(
+    message = "This API is for the :responsive-ui-testing module only. Use the public testing helpers instead.",
+    level = RequiresOptIn.Level.WARNING,
+)
+@Retention(AnnotationRetention.BINARY)
+public annotation class InternalResponsiveUiTestApi
+
+/**
+ * Override used by `:responsive-ui-testing`'s `setContentWithScreenWidth(...)`
+ * to inject a deterministic screen width into UI tests where
+ * `LocalWindowInfo.containerSize.width` would otherwise report 0 in headless
+ * test compositions.
+ *
+ * Production code should not touch this — use [rememberScreenWidth] directly.
+ */
+@InternalResponsiveUiTestApi
+public val LocalScreenWidthOverride: androidx.compose.runtime.ProvidableCompositionLocal<Int?> =
+    staticCompositionLocalOf { null }
 
 /**
  * App-wide default [ScreenBreakpoints]. Install once at the app root:
@@ -89,6 +106,7 @@ public val LocalResponsiveFallback: androidx.compose.runtime.ProvidableCompositi
 /**
  * Current window width in dp, reactive to window resizes on every target.
  */
+@OptIn(InternalResponsiveUiTestApi::class)
 @Composable
 public fun rememberScreenWidth(): Int {
     LocalScreenWidthOverride.current?.let { return it }
@@ -184,12 +202,13 @@ public fun ShowOnScreenType(
 
 @Composable
 private fun DefaultFallbackWidget(type: ScreenType) {
+    val typeName = type::class.simpleName ?: "Unknown"
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = "No view available for ${type::class.simpleName} screen size",
+            text = stringResource(Res.string.responsive_ui_no_view_for_screen, typeName),
             color = LocalContentColor.current,
         )
     }

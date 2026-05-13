@@ -30,6 +30,7 @@ plugins {
 
 rootProject.name = "responsive-ui-sample"
 include(":responsive-ui")
+include(":responsive-ui-testing")
 include(":example")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
