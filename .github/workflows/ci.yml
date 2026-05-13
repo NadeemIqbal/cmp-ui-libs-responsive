@@ -13,50 +13,86 @@ permissions:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         include:
-          # iOS tests - Commented out until iOS targets are enabled
-          # - target: iosSimulatorArm64Test
-          #   os: macos-latest
-          - target: desktopTest
+          - target: ":responsive-ui:desktopTest"
             os: ubuntu-latest
-          - target: testDebugUnitTest
+          - target: ":responsive-ui:wasmJsBrowserTest"
             os: ubuntu-latest
-          - target: testReleaseUnitTest
+          - target: ":responsive-ui:testDebugUnitTest :responsive-ui:testReleaseUnitTest"
             os: ubuntu-latest
-          - target: jsTest
-            os: ubuntu-latest
+          - target: ":responsive-ui:iosSimulatorArm64Test"
+            os: macos-latest
     runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      
+
     - name: Validate Gradle Wrapper
       uses: gradle/actions/wrapper-validation@v3
       continue-on-error: true
-      
+
     - name: Cache Kotlin Konan
       uses: actions/cache@v4
       with:
         path: |
           ~/.konan
-        key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
+        key: ${{ runner.os }}-konan-${{ hashFiles('**/gradle/libs.versions.toml') }}
         restore-keys: |
-          ${{ runner.os }}-
-        
+          ${{ runner.os }}-konan-
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'zulu'
-        
+
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-      
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v3
       with:
         arguments: ${{ matrix.target }} --no-daemon --stacktrace
       env:
-        GRADLE_OPTS: -Dorg.gradle.daemon=false 
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+  sample-builds:
+    name: Build :example sample app
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'zulu'
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
+    - name: Cache Kotlin Konan
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.konan
+        key: ${{ runner.os }}-konan-${{ hashFiles('**/gradle/libs.versions.toml') }}
+
+    - name: Assemble Android
+      run: ./gradlew :example:assembleDebug --no-daemon --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+    - name: Package desktop distribution
+      run: ./gradlew :example:packageDistributionForCurrentOS --no-daemon --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+    - name: Link iOS framework
+      run: ./gradlew :example:linkDebugFrameworkIosSimulatorArm64 --no-daemon --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false

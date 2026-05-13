@@ -1,3 +1,5 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -9,34 +11,37 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
-rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin> {
-    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension>().apply {
-        nodeVersion = "18.15.0"
-        download = false
-    }
-}
-
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_11)
-            }
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
 
     jvm("desktop")
 
+    wasmJs {
+        browser()
+    }
+
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ExampleApp"
+            isStatic = true
+        }
+    }
+
     sourceSets {
         val desktopMain by getting
-        
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-        }
+
         commonMain.dependencies {
-                implementation(project(":responsive-ui"))
-                implementation(compose.runtime)
-                implementation(compose.foundation)
+            implementation(project(":responsive-ui"))
+            implementation(compose.runtime)
+            implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
@@ -46,9 +51,13 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            }
+        }
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+        }
         desktopMain.dependencies {
-                implementation(compose.desktop.currentOs)
+            implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
     }
@@ -95,4 +104,4 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
-} 
+}

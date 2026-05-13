@@ -18,7 +18,8 @@ buildscript {
 plugins {
   base
   alias(libs.plugins.conventions)
-  
+  alias(libs.plugins.kotlinx.binaryCompatibilityValidator)
+
   // this is necessary to avoid the plugins to be loaded multiple times
   // in each subproject's classloader
   alias(libs.plugins.androidApplication) apply false
@@ -30,14 +31,24 @@ plugins {
   alias(libs.plugins.vanniktech.mavenPublish) apply false
 }
 
+apiValidation {
+  // Only validate the library, not the sample app.
+  ignoredProjects += listOf("example")
+  // Klib (Wasm/iOS) ABI dumps are configured under KLib block.
+  @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
+  klib {
+    enabled = true
+  }
+}
+
 deleteRootBuildDirWhenCleaning()
 
 gradleConventionsDefaults {
   android {
     sdkVersions(
-      compileSdk = libs.versions.android.sdk.compile,
-      targetSdk = libs.versions.android.sdk.target,
-      minSdk = libs.versions.android.sdk.min,
+      compileSdk = libs.versions.android.compileSdk,
+      targetSdk = libs.versions.android.targetSdk,
+      minSdk = libs.versions.android.minSdk,
     )
   }
 
@@ -63,10 +74,8 @@ gradleConventionsKmpDefaults {
   targets(
     KmpTarget.Android,
     KmpTarget.Ios,
-    KmpTarget.Js,
     KmpTarget.Jvm,
-    // Disable WebAssembly for JitPack builds
-    // KmpTarget.WasmJs,
+    KmpTarget.WasmJs,
   )
 }
 

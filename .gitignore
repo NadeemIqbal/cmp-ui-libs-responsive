@@ -34,12 +34,11 @@ converted-key.txt
 key.gpg
 *.key
 *.gpg
+*.asc
+*.pgp
 
 # Danger output
 danger_out.json
-
-# Changelogs (if generated)
-CHANGELOG.md
 
 # Misc
 *.swp
