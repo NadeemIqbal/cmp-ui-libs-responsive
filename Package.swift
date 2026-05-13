@@ -32,7 +32,7 @@ let package = Package(
             name: "ResponsiveUI",
             // PLACEHOLDER — auto-updated by .github/workflows/publish.yml on each tagged release.
             url: "https://github.com/NadeemIqbal/cmp-ui-libs-responsive/releases/download/v1.0.0/ResponsiveUI.xcframework.zip",
-            checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+            checksum: "93f4852f57cd4a2314d9933f315ba57b55a5ce13c7307bc29cead33c8d233dfd"
         ),
     ]
 )
