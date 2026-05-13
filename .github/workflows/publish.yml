@@ -57,10 +57,10 @@ jobs:
         echo "Publishing version: $VERSION"
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-    - name: Build and Test
-      run: ./gradlew :responsive-ui:build -Pversion=${{ steps.version.outputs.version }} --no-daemon --stacktrace
-      env:
-        GRADLE_OPTS: -Dorg.gradle.daemon=false
+    # No separate Build and Test step — the publish task transitively assembles
+    # everything it needs. Tests have their own workflow (ci.yml). This keeps
+    # publish robust against transient network failures in test-runner setup
+    # (e.g. JetBrains Space 503s when fetching Node for wasmJsBrowserTest).
 
     - name: Publish to Maven Central
       run: ./gradlew publishAndReleaseToMavenCentral -Pversion=${{ steps.version.outputs.version }} --no-configuration-cache --no-daemon --stacktrace

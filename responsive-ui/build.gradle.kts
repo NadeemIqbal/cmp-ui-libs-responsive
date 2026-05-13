@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "io.github.nadeemiqbal"
-version = "0.0.10"
+version = "0.0.11"
 
 android {
     namespace = "com.nadeem.responsiveui"
