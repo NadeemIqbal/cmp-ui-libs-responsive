@@ -15,9 +15,9 @@ phone to tablet to desktop without hand-rolling the plumbing.
 
 📚 **[API docs](https://nadeemiqbal.github.io/cmp-ui-libs-responsive/)** · auto-published from `master`
 
-<video src="https://github.com/NadeemIqbal/cmp-ui-libs-responsive/raw/master/example.mp4" autoplay loop muted playsinline width="100%"></video>
+![Demo](https://raw.githubusercontent.com/NadeemIqbal/cmp-ui-libs-responsive/master/example.gif)
 
-> The demo above shows the `:example` app — resize the window and watch `AdaptiveNavigation` swap between bottom-bar / rail / drawer while the slots flip through breakpoints. [Run it yourself](#running-the-demo).
+> The demo shows the `:example` app — resize the window and watch `AdaptiveNavigation` swap between bottom-bar / rail / drawer while the slots flip through breakpoints. [Run it yourself](#running-the-demo).
 
 ## What you get
 
