@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.vanniktech.mavenPublish)
+    id("org.jetbrains.dokka")  // version is on the root buildscript classpath
     id("com.eygraber.conventions-detekt")
 }
 
@@ -161,5 +162,44 @@ mavenPublishing {
             connection.set("scm:git:git://github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
             developerConnection.set("scm:git:ssh://git@github.com/NadeemIqbal/cmp-ui-libs-responsive.git")
         }
+    }
+}
+
+dokka {
+    moduleName.set("responsive-ui")
+
+    dokkaSourceSets.configureEach {
+        // Use the GitHub source location so every doc entry has a
+        // "source" link to the exact line on master.
+        sourceLink {
+            localDirectory.set(rootDir)
+            remoteUrl("https://github.com/NadeemIqbal/cmp-ui-libs-responsive/blob/master/")
+            remoteLineSuffix.set("#L")
+        }
+        // Hide private / internal API from the public docs site.
+        documentedVisibilities.set(setOf(org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier.Public))
+
+        // Resolve KDoc references like [LocalDensity] / [ComposeUiTest] to the
+        // upstream JetBrains / AndroidX docs instead of leaving them unlinked.
+        externalDocumentationLinks.register("kotlinx-coroutines") {
+            url("https://kotlinlang.org/api/kotlinx.coroutines/")
+        }
+        externalDocumentationLinks.register("androidx-compose") {
+            url("https://developer.android.com/reference/kotlin/")
+        }
+
+        // Drop noisy Kotlin internal package names from the docs index.
+        perPackageOption {
+            matchingRegex.set(".*\\.internal.*")
+            suppress.set(true)
+        }
+    }
+
+    pluginsConfiguration.html {
+        footerMessage.set(
+            "io.github.nadeemiqbal:responsive-ui · " +
+                "<a href='https://central.sonatype.com/artifact/io.github.nadeemiqbal/responsive-ui'>Maven Central</a> · " +
+                "<a href='https://github.com/NadeemIqbal/cmp-ui-libs-responsive'>GitHub</a>"
+        )
     }
 }
