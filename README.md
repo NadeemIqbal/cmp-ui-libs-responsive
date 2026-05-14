@@ -3,6 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.nadeemiqbal/responsive-ui)](https://central.sonatype.com/artifact/io.github.nadeemiqbal/responsive-ui)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/NadeemIqbal/cmp-ui-libs-responsive/actions/workflows/ci.yml/badge.svg)](https://github.com/NadeemIqbal/cmp-ui-libs-responsive/actions/workflows/ci.yml)
+[![API docs](https://img.shields.io/badge/API_docs-Dokka-orange)](https://nadeemiqbal.github.io/cmp-ui-libs-responsive/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.21-7F52FF?logo=kotlin)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.3-4285F4)](https://github.com/JetBrains/compose-multiplatform)
 
@@ -13,6 +14,8 @@ configuration.
 
 Targets: **Android**, **Desktop (JVM)**, **iOS** (`iosArm64`, `iosSimulatorArm64`),
 **Wasm/JS**.
+
+📚 **[API docs →](https://nadeemiqbal.github.io/cmp-ui-libs-responsive/)** · auto-published from master on every push
 
 ![Demo](https://raw.githubusercontent.com/NadeemIqbal/cmp-ui-libs-responsive/master/example.gif)
 
