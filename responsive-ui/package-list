@@ -1,0 +1,33 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.nadeem.responsiveui////PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/index.html
+$dokka.location:com.nadeem.responsiveui//AdaptiveNavigation/#kotlin.collections.List[com.nadeem.responsiveui.AdaptiveNavigationItem]#kotlin.Int#kotlin.Function1[kotlin.Int,kotlin.Unit]#androidx.compose.ui.Modifier#com.nadeem.responsiveui.ScreenBreakpoints#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation.html
+$dokka.location:com.nadeem.responsiveui//LocalResponsiveFallback/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-local-responsive-fallback.html
+$dokka.location:com.nadeem.responsiveui//LocalScreenBreakpoints/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-local-screen-breakpoints.html
+$dokka.location:com.nadeem.responsiveui//LocalScreenWidthOverride/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-local-screen-width-override.html
+$dokka.location:com.nadeem.responsiveui//ResponsiveView/#kotlin.Function0[kotlin.Unit]?#kotlin.Function0[kotlin.Unit]?#kotlin.Function0[kotlin.Unit]?#kotlin.Function0[kotlin.Unit]?#com.nadeem.responsiveui.ScreenBreakpoints#androidx.compose.ui.Modifier/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-responsive-view.html
+$dokka.location:com.nadeem.responsiveui//ScreenTypeLayout/#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]#com.nadeem.responsiveui.ScreenBreakpoints#androidx.compose.ui.Modifier/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type-layout.html
+$dokka.location:com.nadeem.responsiveui//ShowOnScreenType/#kotlin.collections.List[com.nadeem.responsiveui.ScreenType]#com.nadeem.responsiveui.ScreenBreakpoints#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-show-on-screen-type.html
+$dokka.location:com.nadeem.responsiveui//TwoPaneLayout/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]#androidx.compose.ui.Modifier#com.nadeem.responsiveui.ScreenType#kotlin.Float#com.nadeem.responsiveui.ScreenBreakpoints/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-two-pane-layout.html
+$dokka.location:com.nadeem.responsiveui//rememberScreenHeight/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/remember-screen-height.html
+$dokka.location:com.nadeem.responsiveui//rememberScreenType/#com.nadeem.responsiveui.ScreenBreakpoints/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/remember-screen-type.html
+$dokka.location:com.nadeem.responsiveui//rememberScreenWidth/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/remember-screen-width.html
+$dokka.location:com.nadeem.responsiveui//responsiveValue/#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])#com.nadeem.responsiveui.ScreenBreakpoints/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/responsive-value.html
+$dokka.location:com.nadeem.responsiveui/AdaptiveNavigationItem///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation-item/index.html
+$dokka.location:com.nadeem.responsiveui/AdaptiveNavigationItem/AdaptiveNavigationItem/#kotlin.String#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation-item/-adaptive-navigation-item.html
+$dokka.location:com.nadeem.responsiveui/AdaptiveNavigationItem/icon/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation-item/icon.html
+$dokka.location:com.nadeem.responsiveui/AdaptiveNavigationItem/label/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation-item/label.html
+$dokka.location:com.nadeem.responsiveui/AdaptiveNavigationItem/selectedIcon/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-adaptive-navigation-item/selected-icon.html
+$dokka.location:com.nadeem.responsiveui/InternalResponsiveUiTestApi///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-internal-responsive-ui-test-api/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints/ScreenBreakpoints/#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/-screen-breakpoints.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints/getScreenType/#kotlin.Int/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/get-screen-type.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints/mobile/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/mobile.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints/tablet/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/tablet.html
+$dokka.location:com.nadeem.responsiveui/ScreenBreakpoints/watch/#/PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-breakpoints/watch.html
+$dokka.location:com.nadeem.responsiveui/ScreenType.Desktop///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type/-desktop/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenType.Mobile///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type/-mobile/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenType.Tablet///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type/-tablet/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenType.Watch///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type/-watch/index.html
+$dokka.location:com.nadeem.responsiveui/ScreenType///PointingToDeclaration/responsive-ui/com.nadeem.responsiveui/-screen-type/index.html
+com.nadeem.responsiveui

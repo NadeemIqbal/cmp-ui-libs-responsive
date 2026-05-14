@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>com.nadeem.responsiveui</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    responsive-ui
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+1.0.0        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true"
+                        data-filter=":responsive-ui/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":responsive-ui/commonMain"
+                                       data-filter=":responsive-ui/commonMain"/>
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    responsive-ui
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="responsive-ui::com.nadeem.responsiveui////PointingToDeclaration//1562788486">
+  <div class="breadcrumbs"><a href="../../index.html">responsive-ui</a><span class="delimiter">/</span><span class="current">com.nadeem.responsiveui</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-157273550%2FClasslikes%2F1562788486" anchor-label="AdaptiveNavigationItem" id="-157273550%2FClasslikes%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-adaptive-navigation-item/index.html"><span>Adaptive</span><wbr></wbr><span>Navigation</span><wbr></wbr><span><span>Item</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-157273550%2FClasslikes%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-adaptive-navigation-item/index.html">AdaptiveNavigationItem</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>label<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>icon<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>selectedIcon<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>icon</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A single destination in <a href="-adaptive-navigation.html">AdaptiveNavigation</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1487506448%2FClasslikes%2F1562788486" anchor-label="InternalResponsiveUiTestApi" id="-1487506448%2FClasslikes%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-internal-responsive-ui-test-api/index.html"><span>Internal</span><wbr></wbr><span>Responsive</span><wbr></wbr><span>Ui</span><wbr></wbr><span>Test</span><wbr></wbr><span><span>Api</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1487506448%2FClasslikes%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-requires-opt-in/index.html"><span class="token annotation builtin">RequiresOptIn</span></a><span class="token punctuation">(</span><span>message<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;This API is for the :responsive-ui-testing module only. Use the public testing helpers instead.&quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span>level<span class="token operator"> = </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-requires-opt-in/-level/-w-a-r-n-i-n-g/index.html">RequiresOptIn.Level.WARNING</a></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">annotation class </span><a href="-internal-responsive-ui-test-api/index.html">InternalResponsiveUiTestApi</a></div><div class="brief "><p class="paragraph">Marks an API that's part of the contract between <code class="lang-kotlin">:responsive-ui</code> and <code class="lang-kotlin">:responsive-ui-testing</code>. Production consumer code should never need to opt in.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1644736733%2FClasslikes%2F1562788486" anchor-label="ScreenBreakpoints" id="1644736733%2FClasslikes%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-screen-breakpoints/index.html"><span>Screen</span><wbr></wbr><span><span>Breakpoints</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1644736733%2FClasslikes%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>watch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">300</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>mobile<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">600</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>tablet<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">900</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Configuration for screen breakpoints in dp.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1027437801%2FClasslikes%2F1562788486" anchor-label="ScreenType" id="1027437801%2FClasslikes%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-screen-type/index.html"><span>Screen</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1027437801%2FClasslikes%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-screen-type/index.html">ScreenType</a></div><div class="brief "><p class="paragraph">Screen-size buckets used to drive responsive layout decisions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="746732297%2FProperties%2F1562788486" anchor-label="LocalResponsiveFallback" id="746732297%2FProperties%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-local-responsive-fallback.html"><span>Local</span><wbr></wbr><span>Responsive</span><wbr></wbr><span><span>Fallback</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="746732297%2FProperties%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="-local-responsive-fallback.html">LocalResponsiveFallback</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/ProvidableCompositionLocal.html">ProvidableCompositionLocal</a><span class="token operator">&lt;</span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><a href="-screen-type/index.html">ScreenType</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">App-wide fallback content shown by <a href="-screen-type-layout.html">ScreenTypeLayout</a> and <a href="-responsive-view.html">ResponsiveView</a> when the slot for the current screen type is null. Install at the app root to brand the placeholder; defaults to a plain centred message.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1815345563%2FProperties%2F1562788486" anchor-label="LocalScreenBreakpoints" id="-1815345563%2FProperties%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-local-screen-breakpoints.html"><span>Local</span><wbr></wbr><span>Screen</span><wbr></wbr><span><span>Breakpoints</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1815345563%2FProperties%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="-local-screen-breakpoints.html">LocalScreenBreakpoints</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/ProvidableCompositionLocal.html">ProvidableCompositionLocal</a><span class="token operator">&lt;</span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">App-wide default <a href="-screen-breakpoints/index.html">ScreenBreakpoints</a>. Install once at the app root:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1019637973%2FProperties%2F1562788486" anchor-label="LocalScreenWidthOverride" id="1019637973%2FProperties%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-local-screen-width-override.html"><span>Local</span><wbr></wbr><span>Screen</span><wbr></wbr><span>Width</span><wbr></wbr><span><span>Override</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1019637973%2FProperties%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="-local-screen-width-override.html">LocalScreenWidthOverride</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/ProvidableCompositionLocal.html">ProvidableCompositionLocal</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Override used by <code class="lang-kotlin">:responsive-ui-testing</code>'s <code class="lang-kotlin">setContentWithScreenWidth(...)</code> to inject a deterministic screen width into UI tests where <code class="lang-kotlin">LocalWindowInfo.containerSize.width</code> would otherwise report 0 in headless test compositions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-154594827%2FFunctions%2F1562788486" anchor-label="AdaptiveNavigation" id="-154594827%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-adaptive-navigation.html"><span>Adaptive</span><wbr></wbr><span><span>Navigation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-154594827%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-adaptive-navigation.html"><span class="token function">AdaptiveNavigation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">items<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-adaptive-navigation-item/index.html">AdaptiveNavigationItem</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">selectedIndex<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">onItemSelected<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current<span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adaptive navigation chrome that swaps shape based on screen size:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1269128336%2FFunctions%2F1562788486" anchor-label="rememberScreenHeight" id="-1269128336%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-screen-height.html"><span>remember</span><wbr></wbr><span>Screen</span><wbr></wbr><span><span>Height</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1269128336%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="remember-screen-height.html"><span class="token function">rememberScreenHeight</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Current window height in dp, reactive to window resizes on every target.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="763614480%2FFunctions%2F1562788486" anchor-label="rememberScreenType" id="763614480%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-screen-type.html"><span>remember</span><wbr></wbr><span>Screen</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="763614480%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="remember-screen-type.html"><span class="token function">rememberScreenType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-screen-type/index.html">ScreenType</a></div><div class="brief "><p class="paragraph">Current <a href="-screen-type/index.html">ScreenType</a>, computed from <a href="remember-screen-width.html">rememberScreenWidth</a> against the provided <a href="remember-screen-type.html">breakpoints</a> (defaulting to <a href="-local-screen-breakpoints.html">LocalScreenBreakpoints</a>).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="275763837%2FFunctions%2F1562788486" anchor-label="rememberScreenWidth" id="275763837%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remember-screen-width.html"><span>remember</span><wbr></wbr><span>Screen</span><wbr></wbr><span><span>Width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="275763837%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="remember-screen-width.html"><span class="token function">rememberScreenWidth</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Current window width in dp, reactive to window resizes on every target.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-186575108%2FFunctions%2F1562788486" anchor-label="responsiveValue" id="-186575108%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="responsive-value.html"><span>responsive</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-186575108%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="responsive-value.html">T</a><span class="token operator">&gt; </span><a href="responsive-value.html"><span class="token function">responsiveValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mobile<span class="token operator">: </span><a href="responsive-value.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">tablet<span class="token operator">: </span><a href="responsive-value.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">desktop<span class="token operator">: </span><a href="responsive-value.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">watch<span class="token operator">: </span><a href="responsive-value.html">T</a><span class="token operator"> = </span>mobile<span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="responsive-value.html">T</a></div><div class="brief "><p class="paragraph">Picks one of four values based on the current <a href="-screen-type/index.html">ScreenType</a>. The most common responsive pattern — works for any <code class="lang-kotlin">T</code> (dp, pixel counts, strings, column counts, lambdas, whole composables).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-518198119%2FFunctions%2F1562788486" anchor-label="ResponsiveView" id="-518198119%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-responsive-view.html"><span>Responsive</span><wbr></wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-518198119%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-responsive-view.html"><span class="token function">ResponsiveView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">watch<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">mobile<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">tablet<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">desktop<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current<span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Slot-based layout that renders one of <a href="-responsive-view.html">watch</a> / <a href="-responsive-view.html">mobile</a> / <a href="-responsive-view.html">tablet</a> / <a href="-responsive-view.html">desktop</a> depending on the current screen size. Slots that are <code class="lang-kotlin">null</code> fall back to <a href="-local-responsive-fallback.html">LocalResponsiveFallback</a> (the library default just shows a text placeholder).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1628817478%2FFunctions%2F1562788486" anchor-label="ScreenTypeLayout" id="1628817478%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-screen-type-layout.html"><span>Screen</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Layout</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1628817478%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-screen-type-layout.html"><span class="token function">ScreenTypeLayout</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">watch<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">mobile<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">tablet<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">desktop<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current<span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Slot-based layout where every slot is mandatory. Use when you want the compiler to enforce that you've covered all four screen types; otherwise use <a href="-responsive-view.html">ResponsiveView</a> which makes slots optional.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1112415434%2FFunctions%2F1562788486" anchor-label="ShowOnScreenType" id="1112415434%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-show-on-screen-type.html"><span>Show</span><wbr></wbr><span>On</span><wbr></wbr><span>Screen</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1112415434%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-show-on-screen-type.html"><span class="token function">ShowOnScreenType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">screenTypes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-screen-type/index.html">ScreenType</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current<span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Conditional rendering — <a href="-show-on-screen-type.html">content</a> is composed only if the current <a href="-screen-type/index.html">ScreenType</a> is in <a href="-show-on-screen-type.html">screenTypes</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1621755754%2FFunctions%2F1562788486" anchor-label="TwoPaneLayout" id="-1621755754%2FFunctions%2F1562788486" data-filterable-set=":responsive-ui/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":responsive-ui/commonMain" data-filterable-set=":responsive-ui/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-two-pane-layout.html"><span>Two</span><wbr></wbr><span>Pane</span><wbr></wbr><span><span>Layout</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1621755754%2FFunctions%2F1562788486"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":responsive-ui/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-two-pane-layout.html"><span class="token function">TwoPaneLayout</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">showSecondary<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">primary<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">secondary<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a> </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">showBothAt<span class="token operator">: </span><a href="-screen-type/index.html">ScreenType</a><span class="token operator"> = </span>ScreenType.Tablet<span class="token punctuation">, </span></span><span class="parameter ">splitFraction<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">0.4f</span><span class="token punctuation">, </span></span><span class="parameter ">breakpoints<span class="token operator">: </span><a href="-screen-breakpoints/index.html">ScreenBreakpoints</a><span class="token operator"> = </span>LocalScreenBreakpoints.current</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Side-by-side layout for list/detail and master/detail patterns.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>io.github.nadeemiqbal:responsive-ui · <a href='https://central.sonatype.com/artifact/io.github.nadeemiqbal/responsive-ui'>Maven Central</a> · <a href='https://github.com/NadeemIqbal/cmp-ui-libs-responsive'>GitHub</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
