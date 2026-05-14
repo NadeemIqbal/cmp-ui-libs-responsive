@@ -7,17 +7,32 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.21-7F52FF?logo=kotlin)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.3-4285F4)](https://github.com/JetBrains/compose-multiplatform)
 
-A Compose Multiplatform library for responsive layouts. Pick a slot per
-screen size, drop in an adaptive nav rail / bottom bar / drawer, or split
-a screen into list+detail panes — all with one consistent breakpoint
-configuration.
+A small, focused Compose Multiplatform library for **responsive layouts** —
+pick the right composable per screen size and let your UI swap shape from
+phone to tablet to desktop without hand-rolling the plumbing.
 
-Targets: **Android**, **Desktop (JVM)**, **iOS** (`iosArm64`, `iosSimulatorArm64`),
-**Wasm/JS**.
+**Targets:** Android · Desktop (JVM) · iOS (`iosArm64`, `iosSimulatorArm64`) · Wasm/JS
 
-📚 **[API docs →](https://nadeemiqbal.github.io/cmp-ui-libs-responsive/)** · auto-published from master on every push
+📚 **[API docs](https://nadeemiqbal.github.io/cmp-ui-libs-responsive/)** · auto-published from `master`
 
 ![Demo](https://raw.githubusercontent.com/NadeemIqbal/cmp-ui-libs-responsive/master/example.gif)
+
+## What you get
+
+| API | What it does |
+|---|---|
+| `ResponsiveView` | Slot-based layout — pick a composable for each of Watch / Mobile / Tablet / Desktop |
+| `ScreenTypeLayout` | Same idea, mandatory slots — the compiler enforces full coverage |
+| `responsiveValue<T>` | Pick any value (`Dp`, `Int`, `String`, …) based on the current screen type |
+| `AdaptiveNavigation` | Bottom bar on phones, navigation rail on tablets, persistent drawer on desktop — from one items list |
+| `TwoPaneLayout` | Side-by-side master/detail on tablet+, collapses to a single pane on phone |
+| `ShowOnScreenType` | Conditional rendering by screen-type set |
+| `LocalScreenBreakpoints` | Install custom breakpoints once at the app root |
+| `LocalResponsiveFallback` | Install a branded placeholder for missing slots app-wide |
+| `rememberScreenType` / `rememberScreenWidth` / `rememberScreenHeight` | Live, reactive screen state |
+
+A companion `responsive-ui-testing` artifact ships `setContentWithScreenWidth { }`
+so breakpoint-sensitive UI tests are deterministic across every platform.
 
 ## Install
 
@@ -26,9 +41,7 @@ Targets: **Android**, **Desktop (JVM)**, **iOS** (`iosArm64`, `iosSimulatorArm64
 ```kotlin
 // settings.gradle.kts
 dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
+    repositories { mavenCentral() }
 }
 
 // build.gradle.kts
@@ -42,16 +55,15 @@ kotlin {
 ### Android-only
 
 ```kotlin
-// build.gradle.kts (Android library or app module)
 dependencies {
     implementation("io.github.nadeemiqbal:responsive-ui:1.0.0")
 }
 ```
 
 Gradle's variant resolution picks the right per-target artifact via the
-published module metadata — no separate Android coordinate needed.
+published module metadata — no separate Android coordinate.
 
-### Swift / SwiftUI (via SwiftPM)
+### Swift / SwiftUI (SwiftPM)
 
 ```swift
 // Package.swift
@@ -64,12 +76,9 @@ dependencies: [
 import ResponsiveUI
 ```
 
-## Core API
-
-### `ResponsiveView` — slot per screen type
+## Quick start
 
 ```kotlin
-import androidx.compose.runtime.Composable
 import com.nadeem.responsiveui.ResponsiveView
 
 @Composable
@@ -82,70 +91,44 @@ fun MyScreen() {
 }
 ```
 
-Slots are nullable — pass only what you need. Unfilled slots render a
-default placeholder; replace the default app-wide via `LocalResponsiveFallback`.
+Slots are nullable — pass only what you need. Null slots render a default
+placeholder; replace it app-wide via `LocalResponsiveFallback`.
 
-### `responsiveValue<T>()` — one value per breakpoint
+### Pick a value by screen type
 
 ```kotlin
-import com.nadeem.responsiveui.responsiveValue
-
-val padding = responsiveValue(
-    mobile = 8.dp,
-    tablet = 16.dp,
-    desktop = 24.dp,
-)
-
-val columnCount = responsiveValue(
-    mobile = 1,
-    tablet = 2,
-    desktop = 4,
-)
+val padding = responsiveValue(mobile = 8.dp, tablet = 16.dp, desktop = 24.dp)
+val columns = responsiveValue(mobile = 1, tablet = 2, desktop = 4)
 ```
 
 Generic over `T` — works for `Dp`, `Int`, `String`, lambdas, anything.
 
-### `LocalScreenBreakpoints` — set breakpoints once at the app root
+### Install breakpoints once at the app root
 
 ```kotlin
-import com.nadeem.responsiveui.LocalScreenBreakpoints
-import com.nadeem.responsiveui.ScreenBreakpoints
-
-@Composable
-fun App() {
-    CompositionLocalProvider(
-        LocalScreenBreakpoints provides ScreenBreakpoints(
-            watch = 280,
-            mobile = 600,
-            tablet = 900,
-        )
-    ) {
-        AppContent()  // every responsive composable picks these up
-    }
+CompositionLocalProvider(
+    LocalScreenBreakpoints provides ScreenBreakpoints(
+        watch = 280, mobile = 600, tablet = 900,
+    )
+) {
+    AppContent()  // every responsive composable picks these up
 }
 ```
 
-Defaults are aligned with Material 3's `WindowSizeClass` boundaries
+Defaults align with Material 3's `WindowSizeClass` boundaries
 (600 dp = Compact↔Medium, 900 dp ≈ Medium↔Expanded).
 
-### `AdaptiveNavigation` — bottom bar / rail / drawer auto-swap
+### Adaptive navigation chrome
 
 ```kotlin
-import com.nadeem.responsiveui.AdaptiveNavigation
-import com.nadeem.responsiveui.AdaptiveNavigationItem
-
 val items = listOf(
-    AdaptiveNavigationItem("Home", icon = { Icon(Icons.Filled.Home, null) }),
-    AdaptiveNavigationItem("Search", icon = { Icon(Icons.Filled.Search, null) }),
+    AdaptiveNavigationItem("Home",     icon = { Icon(Icons.Filled.Home,     null) }),
+    AdaptiveNavigationItem("Search",   icon = { Icon(Icons.Filled.Search,   null) }),
     AdaptiveNavigationItem("Settings", icon = { Icon(Icons.Filled.Settings, null) }),
 )
 
 var selected by remember { mutableIntStateOf(0) }
-AdaptiveNavigation(
-    items = items,
-    selectedIndex = selected,
-    onItemSelected = { selected = it },
-) {
+AdaptiveNavigation(items, selectedIndex = selected, onItemSelected = { selected = it }) {
     when (selected) {
         0 -> HomeContent()
         1 -> SearchContent()
@@ -154,72 +137,56 @@ AdaptiveNavigation(
 }
 ```
 
-- **Watch / Mobile**: `NavigationBar` at the bottom
-- **Tablet**: `NavigationRail` on the left
-- **Desktop**: labelled drawer on the left
+| Screen | Chrome |
+|---|---|
+| Watch / Mobile | bottom `NavigationBar` |
+| Tablet | left `NavigationRail` |
+| Desktop | labelled persistent drawer |
 
-### `TwoPaneLayout` — list/detail collapse on small screens
+### List / detail with `TwoPaneLayout`
 
 ```kotlin
-import com.nadeem.responsiveui.TwoPaneLayout
-
-var selectedItemId by remember { mutableStateOf<String?>(null) }
+var selectedId by remember { mutableStateOf<String?>(null) }
 TwoPaneLayout(
-    showSecondary = selectedItemId != null,
-    primary = { ItemList(onSelect = { selectedItemId = it }) },
-    secondary = { ItemDetail(selectedItemId) },
+    showSecondary = selectedId != null,
+    primary   = { ItemList(onSelect = { selectedId = it }) },
+    secondary = { ItemDetail(selectedId) },
 )
 ```
 
-- **≥ Tablet**: both panes side-by-side
-- **Mobile**: only one pane at a time — `secondary` when `showSecondary == true`,
-  `primary` otherwise
+- **≥ Tablet:** both panes side-by-side
+- **< Tablet:** one pane at a time — `secondary` when `showSecondary == true`, `primary` otherwise
 
-### `ShowOnScreenType` — show content only at certain sizes
+### Conditional rendering
 
 ```kotlin
-import com.nadeem.responsiveui.ScreenType
-import com.nadeem.responsiveui.ShowOnScreenType
-
-ShowOnScreenType(screenTypes = listOf(ScreenType.Tablet, ScreenType.Desktop)) {
+ShowOnScreenType(listOf(ScreenType.Tablet, ScreenType.Desktop)) {
     SideNavigation()  // hidden on Mobile / Watch
 }
 ```
 
-### Reading the current screen state
+### Live screen state
 
 ```kotlin
-import com.nadeem.responsiveui.rememberScreenType
-import com.nadeem.responsiveui.rememberScreenWidth
-import com.nadeem.responsiveui.rememberScreenHeight
-
-val type = rememberScreenType()      // ScreenType.Mobile | Tablet | Desktop | Watch
-val width = rememberScreenWidth()    // Int (dp)
+val type   = rememberScreenType()    // ScreenType.Mobile | Tablet | Desktop | Watch
+val width  = rememberScreenWidth()   // Int (dp)
 val height = rememberScreenHeight()  // Int (dp)
 ```
 
-## Testing your responsive UI
+## Testing
 
-Add the companion testing artifact to your test source set:
+Headless test compositions report `containerSize.width = 0` on some
+targets (notably iOS simulator), which makes breakpoint-sensitive UI
+tests flaky. The companion artifact injects a deterministic width:
 
 ```kotlin
 // build.gradle.kts
-kotlin {
-    sourceSets.commonTest.dependencies {
-        implementation("io.github.nadeemiqbal:responsive-ui-testing:1.0.0")
-    }
+kotlin.sourceSets.commonTest.dependencies {
+    implementation("io.github.nadeemiqbal:responsive-ui-testing:1.0.0")
 }
 ```
 
-Force a specific screen width in tests — `LocalWindowInfo.containerSize.width`
-otherwise reports `0` in headless test compositions:
-
 ```kotlin
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runComposeUiTest
-import com.nadeem.responsiveui.testing.setContentWithScreenWidth
-import kotlin.test.Test
-
 @OptIn(ExperimentalTestApi::class)
 class MyResponsiveTest {
     @Test
@@ -232,35 +199,34 @@ class MyResponsiveTest {
 }
 ```
 
-## Migration from 0.0.x
+## Running the demo
 
-If you were using `0.0.x`, see [CHANGELOG.md](CHANGELOG.md) for the full
-breaking-change list. Common migrations:
+The `:example` module is a Compose Multiplatform app that exercises every
+public API in a single window — adaptive navigation, slots, value picks,
+two-pane, conditional rendering, custom fallback, live metrics.
 
-| Before (0.0.x) | After (1.0.0) |
-|---|---|
-| `getScreenType()` | `rememberScreenType()` |
-| `getScreenWidth()` / `getScreenHeight()` | `rememberScreenWidth()` / `rememberScreenHeight()` |
-| `ScreenBreakpoints(mobile, tablet, desktop, watch)` | `ScreenBreakpoints(watch, mobile, tablet)` — `desktop` field removed (was redundant) |
-| `ScreenTypeLayoutBuilder.builder(...)` | `ResponsiveView(...)` |
-| `DeviceType` / `getDeviceType()` | use `ScreenType` / `rememberScreenType()` |
-| `DeviceConfig.screenWidth` | `rememberScreenWidth()` |
+```bash
+./gradlew :example:run                                # Desktop
+./gradlew :example:installDebug                        # Android (device/emulator attached)
+./gradlew :example:wasmJsBrowserDevelopmentRun         # Web
+./gradlew :example:linkDebugFrameworkIosSimulatorArm64 # iOS framework
+```
 
-The `[tablet, desktop)` range now correctly resolves to `ScreenType.Desktop`
-instead of `ScreenType.Tablet` (a 0.0.x bug).
+Resize the desktop window to watch `AdaptiveNavigation` swap between
+bottom-bar / rail / drawer and the slots flip through breakpoints live.
 
 ## Development
 
 ```bash
-# Compile non-Android targets (no Android SDK needed)
+# Compile (non-Android targets need no Android SDK)
 ./gradlew :responsive-ui:compileKotlinDesktop
 ./gradlew :responsive-ui:compileKotlinWasmJs
 ./gradlew :responsive-ui:compileKotlinIosSimulatorArm64
 
-# Tests
-./gradlew :responsive-ui:desktopTest                # 35 tests
-./gradlew :responsive-ui:iosSimulatorArm64Test      # 35 tests on iOS sim
-./gradlew :responsive-ui:test                       # 8 pure-logic tests on Android
+# Test
+./gradlew :responsive-ui:desktopTest
+./gradlew :responsive-ui:iosSimulatorArm64Test
+./gradlew :responsive-ui:test                     # Android pure-logic tests
 
 # Local publish (Android SDK required)
 ./gradlew :responsive-ui:publishToMavenLocal
@@ -270,17 +236,36 @@ instead of `ScreenType.Tablet` (a 0.0.x bug).
 ./gradlew :responsive-ui:assembleResponsiveUIReleaseXCFramework
 ```
 
-A standalone consumer sample lives at
-`/Users/nextgeni/Desktop/nadeem/projects/responsive-ui-consumer-sample/` —
-proves end-to-end Maven Central consumption.
-
 ## Publishing
 
-Tagged releases (`v*`) fire
-[`publish.yml`](.github/workflows/publish.yml) on `macos-latest`, which runs
-`publishAndReleaseToMavenCentral`, builds the XCFramework, attaches the zip
-to a GitHub Release, and auto-updates `Package.swift` with the new
-checksum.
+Tag a release on `master` (`v*`) and
+[`publish.yml`](.github/workflows/publish.yml) on `macos-latest`:
+
+1. Runs `publishAndReleaseToMavenCentral`
+2. Builds the XCFramework, zips it, computes SHA-256
+3. Creates a GitHub Release with the zip attached
+4. Updates `Package.swift` URL + checksum and commits it back to `master`
+
+API docs are published to GitHub Pages by
+[`docs.yml`](.github/workflows/docs.yml) on every push to `master`.
+
+<details>
+<summary>Migrating from 0.0.x</summary>
+
+| Before (0.0.x) | After (1.0.0) |
+|---|---|
+| `getScreenType()` | `rememberScreenType()` |
+| `getScreenWidth()` / `getScreenHeight()` | `rememberScreenWidth()` / `rememberScreenHeight()` |
+| `ScreenBreakpoints(mobile, tablet, desktop, watch)` | `ScreenBreakpoints(watch, mobile, tablet)` — the `desktop` field was redundant |
+| `ScreenTypeLayoutBuilder.builder(...)` | `ResponsiveView(...)` |
+| `DeviceType` / `getDeviceType()` | `ScreenType` / `rememberScreenType()` |
+| `DeviceConfig.screenWidth` / `DeviceConfig.screenHeight` | `rememberScreenWidth()` / `rememberScreenHeight()` |
+
+The `[tablet, desktop)` range now correctly resolves to `ScreenType.Desktop`
+instead of `ScreenType.Tablet` — a 0.0.x bug. See [CHANGELOG.md](CHANGELOG.md)
+for the full migration notes.
+
+</details>
 
 ## License
 
